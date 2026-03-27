@@ -1,1 +1,74 @@
+Shacl shape for person
+
+
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <http://schema.org/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix ex: <http://www.example.com/> .
+@prefix rule: <http://www.example.com/rule/> .
+
+rule:Person a sh:NodeShape ;
+sh:targetClass ex:Person ;
+sh:property rule:Person-givenName, rule:Person-Person-ID ;
+.
+
+rule:Person a sh:NodeShape ; 
+sh:targetClass ex:Person ; 
+sh:property rule:Person-given-name, rule:Person-family-name, rule:Person-middle-name, rule:Person-has-person-id,  ;
+.
+
+rule:Person-family-name ; 
+sh:path ex:familyName ;
+sh:datatype xsd:string ; 
+sh:minCount 1 ;
+sh:maxCount 1 ;
+.
+
+rule:Person-given-name ; 
+sh:path ex:givenName ;
+sh:datatype xsd:string ; 
+sh:minCount 1 ;
+sh:maxCount 1 ;
+.
+
+rule:Person-middlename ; 
+sh:path ex:middlename ;
+sh:datatype xsd:string ;
+sh:maxCount 1 ;
+.
+
+rule:Person-PersonId ;
+sh:path ex:hasPersonId ;
+sh:minCount 1 ; 
+sh:maxCount 1 ; 
+sh:or (rule:PersonID-ssn rule:PersonID-dnr rule:PersonID-fictionalId) ##usikker på om disse kan opptre samtidig på samme person. 
+.
+
+rule:PersonId-fnr ; ##burde vi ha med mer info, som gyldighet?
+sh:path ex:fnr ; 
+sh:datatype xsd:string ;
+sh:minLength 11 ;
+sh:maxLength 11 ;
+sh:minCount 1 ;
+sh:maxCount 1 ;
+. 
+
+rule:PersonId-dnr ; ##burde vi ha med mer info, som gyldighet? Dnr er gyldig i 6 mnd.
+sh:path ex:dnr ;
+sh:datatype xsd:string ;
+sh:minLength 11 ;
+sh:maxLength 11 ; 
+sh:minCount 1 ; 
+sh:maxCount 1 ; #mulig å beskrive regler for oppbygging av d-nr? Hensiktmessig?
+.
+
+rule:PersonId-fictionalId ; ##burde vi ha med mer info, som gyldighet?
+sh:path ex:fictionalIDnr ;
+sh:datatype xsd:string
+minCount 1 ;
+maxCount 1 ; 
+.
+
 
