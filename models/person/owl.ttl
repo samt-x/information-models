@@ -1,0 +1,87 @@
+@prefix dc: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schemas: <https://schema.org/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix ex: <http://www.example.com> .
+
+##############################################################
+# Classes
+##############################################################
+
+ex:Person a owl:Class;
+rdfs:label "person"@nb, "person"@nn, "person"@en ;
+owl:equivalentClass <http://www.w3.org/ns/person#Person>
+rdfs:isDefinedBy <http://data.norge.no/[digdirs orgnr]> ;
+. 
+
+ex:PersonId a owl:Class ; 
+rdfs:label "Person ID"@nb ;
+.
+
+
+##############################################################
+# Properties
+##############################################################
+
+ex:givenName a owl:DatatypeProperty ;
+rdfs:label "fornavn"@nb, "førenamn"@nn, "given name"@en ;
+rdfs:domain ex:Person ; ##vise til en bredere klasse? owl:thing?
+rdfs:range rdfs:literal ;
+owl:equivalentProperty foaf:givenName ;
+rdfs:isDefinedBy <http://data.norge.no/[digdirs orgnr]> ;
+.
+
+ex:middleName a owl:DataTypeProperty ;
+rdfs:label "mellomnavn"@nb, "mellomnamn"@nn, "middle name"@en ;
+rdfs:domain ex:personnavn ; ## Vise til en bredere klasse? owl:thing?
+rdfs:range rdfs:literal ;
+owl:equivalentProperty dc:alternativeName ;
+rdfs:isDefinedBy <http://data.norge.no/[digdirs orgnr]> ;
+.
+
+ex:familyName a owl:DataTypeProperty ; 
+rdfs:label "etternavn"@nb, "etternamn"@nn, "family name"@en ;
+rdfs:domain ex:personnavn ; 
+rdfs:range rdfs:literal ; 
+owl:equivalentProperty dc:familyName ;
+rdfs:isDefinedBy <http://data.norge.no/[digdirs orgnr]> ;
+.
+
+ex:personId a owl:ObjectProperty ;
+rdfs:label "person-ID"@nb , "person-ID"@nn , "person ID"@en ;
+rdfs:domain ex:person ;
+rdfs:range ex:PersonId ;
+.
+
+ex:fnr a owl:DataTypeProperty ; ##bør fnr og dnr være samlet under nasjonalt id-nummer?
+rdfs:label "fødselsnummer"@nb ; 
+rdfs:domain ex:personId ; 
+rdfs:range rdfs:Literal ;
+.
+
+ex:dnr a owl:DataTypeProperty ; 
+rdfs:label "d-nummer"@nb ; 
+rdfs:domain ex:personId ; 
+rdfs:range rdfs:Literal ;
+.
+
+ex:fictionalId a owl:DataTypeProperty ; 
+rdfs:label "fiktivt ID-nummer" ; 
+rdfs:domain ex:PersonID ; 
+rdfs:range rdfs:Literal ;
+.
+
+############################################################
+# Examples
+############################################################
+
+(uri for person) a ex:person
+
+ex:givenName "" ;
+ex:middleName "" ; 
+ex:familyName "" ;
+
