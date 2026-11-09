@@ -1,98 +1,20 @@
 id: https://example.org/domenemodell
 name: domenemodell
-title: Enkel domenemodell
+title: Oppvekst og læring – informasjonsmodell i tre lag
 description: >-
-  En enkel eksempelmodell for personer, elever, skoler og organisasjoner.
-  Egenskaper er definert som attributes direkte på klassene.
-  Arvede egenskaper spesialiseres med slot_usage.
+  Første LinkML-utkast basert på «Modell dokumentasjon første utgave»
+  og Miro-skissen med toppontologi, domenekjerne og underdomene.
+  Denne filen samler de tre lagene. Foreløpige valg er beskrevet i README.md.
+version: 0.1.0
 
 prefixes:
   linkml: https://w3id.org/linkml/
   ex: https://example.org/domenemodell/
 
 imports:
-  - linkml:types
+  - 1.toppontologi
+  - 2.domenekjerne
+  - 3.opplaering
 
 default_prefix: ex
 default_range: string
-
-classes:
-  Person:
-    description: En person.
-    attributes:
-      id:
-        description: Unik identifikator for personen.
-        identifier: true
-        range: string
-      navn:
-        description: Personens navn.
-        range: string
-        required: true
-
-  Elev:
-    description: En person som er elev ved en skole.
-    is_a: Person
-    attributes:
-      elevnummer:
-        description: Elevens elevnummer.
-        range: string
-      skole:
-        description: Skolen eleven går på.
-        range: Skole
-
-  Organisasjon:
-    description: En organisasjon.
-    attributes:
-      id:
-        description: Unik identifikator for organisasjonen.
-        identifier: true
-        range: string
-      navn:
-        description: Organisasjonens navn.
-        range: string
-        required: true
-      organisasjonsnummer:
-        description: Organisasjonens organisasjonsnummer.
-        range: string
-
-  Skole:
-    description: Abstrakt felles type for ungdomsskoler og videregående skoler.
-    abstract: true
-    is_a: Organisasjon
-    attributes:
-      skoleeier:
-        description: Organisasjonen som eier skolen, for eksempel en kommune eller fylkeskommune.
-        range: Organisasjon
-
-  Videregåendeskole:
-    title: Videregående skole
-    description: En fylkeskommunal videregående skole i denne eksempelmodellen.
-    is_a: Skole
-    slot_usage:
-      skoleeier:
-        range: Fylkeskommune
-        required: true
-
-  Ungdomsskole:
-    description: En kommunal ungdomsskole i denne eksempelmodellen.
-    is_a: Skole
-    slot_usage:
-      skoleeier:
-        range: Kommune
-        required: true
-
-  Fylkeskommune:
-    description: En fylkeskommunal organisasjon som blant annet kan være skoleeier.
-    is_a: Organisasjon
-    attributes:
-      fylkesnummer:
-        description: Nummeret til fylket fylkeskommunen tilhører.
-        range: string
-
-  Kommune:
-    description: En kommunal organisasjon som blant annet kan være skoleeier.
-    is_a: Organisasjon
-    attributes:
-      kommunenummer:
-        description: Nummeret til kommunen.
-        range: string
