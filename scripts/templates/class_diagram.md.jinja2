@@ -1,0 +1,24 @@
+# {{ title }}
+
+```mermaid
+classDiagram
+    direction TB
+{% for class in classes %}
+    class {{ class.id }}["{{ class.name | label }}"] {
+{% if class.abstract %}
+        <<abstract>>
+{% endif %}
+{% for attribute in class.attributes %}
+        {{ attribute.range | label }} {{ attribute.name | label }} [{{ attribute.cardinality }}]
+{% endfor %}
+    }
+{% endfor %}
+
+{% for relation in inheritance %}
+    {{ relation.parent }} <|-- {{ relation.child }}
+{% endfor %}
+
+{% for relation in relations %}
+    {{ relation.source }} --> "{{ relation.cardinality }}" {{ relation.target }} : {{ relation.name | label }}
+{% endfor %}
+```

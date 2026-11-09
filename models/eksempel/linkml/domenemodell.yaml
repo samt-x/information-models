@@ -1,0 +1,20 @@
+id: https://example.org/domenemodell
+name: domenemodell
+title: Oppvekst og læring – informasjonsmodell i tre lag
+description: >-
+  Første LinkML-utkast basert på «Modell dokumentasjon første utgave»
+  og Miro-skissen med toppontologi, domenekjerne og underdomene.
+  Denne filen samler de tre lagene. Foreløpige valg er beskrevet i README.md.
+version: 0.1.0
+
+prefixes:
+  linkml: https://w3id.org/linkml/
+  ex: https://example.org/domenemodell/
+
+imports:
+  - 1.toppontologi
+  - 2.domenekjerne
+  - 3.opplaering
+
+default_prefix: ex
+default_range: string

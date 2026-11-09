@@ -1,0 +1,167 @@
+id: https://example.org/domenemodell/domenekjerne
+name: domenekjerne
+title: Domenekjerne for oppvekst og læring
+description: Felles begreper og relasjoner for oppvekst og læring.
+
+prefixes:
+  linkml: https://w3id.org/linkml/
+  ex: https://example.org/domenemodell/
+
+imports:
+  - 1.toppontologi
+
+default_prefix: ex
+default_range: string
+
+slots:
+  erRolleFor:
+    description: Den fysiske personen som innehar rollen.
+    range: FysiskPerson
+    required: true
+  utfører:
+    description: Pedagogiske tilbud den ansatte utfører.
+    domain: Ansatt
+    range: PedagogiskTilbud
+    multivalued: true
+  tilbyr:
+    description: Pedagogiske tilbud virksomheten tilbyr.
+    domain: Oppvekstvirksomhet
+    range: PedagogiskTilbud
+    multivalued: true
+    inverse: tilbysAv
+  tilbysAv:
+    description: Oppvekstvirksomheter som tilbyr det pedagogiske tilbudet.
+    domain: PedagogiskTilbud
+    range: Oppvekstvirksomhet
+    multivalued: true
+    inverse: tilbyr
+  harOmsorgsrolle:
+    description: Omsorgsroller knyttet til deltakeren.
+    domain: Deltaker
+    range: Omsorgsrolle
+    multivalued: true
+    inverse: erForesattFor
+  erForesattFor:
+    description: Deltakere personen har en foresatt- eller omsorgsrolle overfor.
+    domain: Omsorgsrolle
+    range: Deltaker
+    multivalued: true
+    inverse: harOmsorgsrolle
+
+classes:
+  Oppvekstvirksomhet:
+    description: Virksomhet som tilbyr og er ansvarlig for gjennomføring av pedagogisk tilbud eller opplæring.
+    is_a: Virksomhet
+    slots:
+      - tilbyr
+    attributes:
+      oppvekstvirksomhetIdentifikasjon:
+        description: Identifikasjon som underenhetsnummer, VIGO-nummer, skolenummer eller barnehagenummer.
+        multivalued: true
+      virksomhetstype:
+        description: Beskrivelse av virksomhetens type eller nivå.
+      geografi:
+        description: Geografisk tilknytning for virksomheten.
+
+  StoetteOgHjelpevirksomhet:
+    title: Støtte- og hjelpevirksomhet
+    description: Virksomhet med en støtte- eller hjelpefunksjon innen oppvekst og læring.
+    is_a: Virksomhet
+    attributes:
+      typeStoetteOgHjelpevirksomhet:
+        description: Type støtte- eller hjelpevirksomhet.
+      støtter:
+        description: Oppvekstvirksomheter som mottar støtte eller hjelp.
+        range: Oppvekstvirksomhet
+        multivalued: true
+
+  Ansatt:
+    description: En persons rolle som ansatt eller tilsatt i en oppvekstvirksomhet.
+    slots:
+      - erRolleFor
+      - utfører
+    attributes:
+      ansattnummer:
+        description: Ansattnummer i virksomheten.
+      stillingsbeskrivelse:
+        description: Beskrivelse av den ansattes stilling.
+      ansettelsestid:
+        description: Tidsrom eller varighet for ansettelsen.
+      ansattVed:
+        description: Oppvekstvirksomheter personen er ansatt ved i denne rollen.
+        range: Oppvekstvirksomhet
+        multivalued: true
+
+  Deltaker:
+    description: En persons rolle som mottaker av et pedagogisk tilbud.
+    slots:
+      - erRolleFor
+      - harOmsorgsrolle
+    attributes:
+      deltakeridentifikator:
+        description: Identifikator for deltakerrollen innen oppvekst og læring.
+      oppnår:
+        description: Resultater deltakeren oppnår.
+        range: Resultat
+        multivalued: true
+      påmeldt:
+        description: Pedagogiske tilbud deltakeren er påmeldt.
+        range: PedagogiskTilbud
+        multivalued: true
+
+  Omsorgsrolle:
+    description: En persons rolle som foresatt eller omsorgsperson for en deltaker.
+    slots:
+      - erRolleFor
+      - erForesattFor
+
+  PedagogiskTilbud:
+    title: Pedagogisk tilbud
+    description: >-
+      Organisert formidling av kunnskap, ferdigheter og holdninger i det offentlige
+      skolesystemet, private institusjoner eller som næringsvirksomhet.
+    slots:
+      - tilbysAv
+    attributes:
+      beskrivelse:
+        description: Beskrivelse av tilbudets innhold, formål og organisering.
+      navnPåTilbud:
+        description: Navnet på det pedagogiske tilbudet.
+      identifikator:
+        description: Identifikator for det pedagogiske tilbudet.
+      periode:
+        description: Tilbudets periode eller varighet.
+
+  Resultat:
+    description: Resultat som gjelder en deltakers gjennomføring av et pedagogisk tilbud.
+    attributes:
+      foreløpigResultat:
+        description: Resultat underveis i gjennomføringen.
+      endeligResultat:
+        description: Resultat ved endt gjennomføring.
+      gjelder:
+        description: Pedagogiske tilbud resultatet gjelder.
+        range: PedagogiskTilbud
+        multivalued: true
+      dokumenteresGjennom:
+        description: Dokumentasjon av resultatet.
+        range: Dokumentasjon
+        multivalued: true
+
+  Dokumentasjon:
+    description: Dokument som dokumenterer forhold ved en deltaker eller et resultat.
+    attributes:
+      dokumentasjonIdentifikator:
+        description: Identifikator for dokumentasjonen.
+      dokumentnavn:
+        description: Navn på dokumentet.
+      dokumenttype:
+        description: Type dokument, for eksempel vedtak, legeerklæring eller vitnemål.
+      dokumentnummer:
+        description: Referansenummer eller saksnummer.
+      status:
+        description: Status på dokumentet, for eksempel under behandling, godkjent eller avvist.
+      gjelder:
+        description: Deltakere dokumentasjonen gjelder.
+        range: Deltaker
+        multivalued: true
