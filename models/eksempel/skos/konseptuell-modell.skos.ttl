@@ -1,0 +1,118 @@
+# Kilden til begrepsdiagrammet. Rediger denne filen direkte.
+# Eksempelopplysninger og definisjoner er illustrative.
+@prefix ex: <https://example.org/begrep/> .
+@prefix samling: <https://example.org/begrepssamling/> .
+@prefix virksomhet: <https://example.org/virksomhet/> .
+@prefix kontakt: <https://example.org/kontaktpunkt/> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix org: <http://www.w3.org/ns/org#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix skosno: <https://data.norge.no/vocabulary/skosno#> .
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#> .
+@prefix xkos: <http://rdf-vocabulary.ddialliance.org/xkos#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+samling:skole a skos:Collection ;
+    dcterms:identifier "https://example.org/begrepssamling/skole"^^xsd:anyURI ;
+    dcterms:publisher virksomhet:modellforvalter ;
+    dcterms:title "Begreper i skoledomenet"@nb,
+        "Omgrep i skuledomenet"@nn ;
+    skos:member ex:elev,
+        ex:fylkeskommune,
+        ex:kommune,
+        ex:organisasjon,
+        ex:person,
+        ex:skole,
+        ex:ungdomsskole,
+        ex:videregåendeskole ;
+    dcat:contactPoint kontakt:begrepsforvaltning .
+
+ex:elev a skos:Concept ;
+    dcterms:identifier "https://example.org/begrep/elev"^^xsd:anyURI ;
+    dcterms:publisher virksomhet:modellforvalter ;
+    xkos:specializes ex:person ;
+    skos:definition "person som mottar opplæring ved en skole"@nb ;
+    skos:prefLabel "elev"@nb, "elev"@nn ;
+    dcat:contactPoint kontakt:begrepsforvaltning ;
+    skosno:isFromConceptIn [ a skosno:AssociativeConceptRelation ;
+            skosno:hasToConcept ex:skole ;
+            skosno:relationRole "går på"@nb, "går på"@nn ] .
+
+ex:person a skos:Concept ;
+    dcterms:identifier "https://example.org/begrep/person"^^xsd:anyURI ;
+    dcterms:publisher virksomhet:modellforvalter ;
+    xkos:generalizes ex:elev ;
+    skos:definition "menneske"@nb ;
+    skos:prefLabel "person"@nb, "person"@nn ;
+    dcat:contactPoint kontakt:begrepsforvaltning .
+
+ex:ungdomsskole a skos:Concept ;
+    dcterms:identifier "https://example.org/begrep/ungdomsskole"^^xsd:anyURI ;
+    dcterms:publisher virksomhet:modellforvalter ;
+    xkos:specializes ex:skole ;
+    skos:definition "skole som tilbyr opplæring på ungdomstrinnet og eies av en kommune"@nb ;
+    skos:prefLabel "ungdomsskole"@nb, "ungdomsskule"@nn ;
+    dcat:contactPoint kontakt:begrepsforvaltning ;
+    skosno:isFromConceptIn [ a skosno:AssociativeConceptRelation ;
+            skosno:hasToConcept ex:kommune ;
+            skosno:relationRole "har skoleeier"@nb, "har skuleeigar"@nn ] .
+
+ex:videregåendeskole a skos:Concept ;
+    dcterms:identifier "https://example.org/begrep/videregåendeskole"^^xsd:anyURI ;
+    dcterms:publisher virksomhet:modellforvalter ;
+    xkos:specializes ex:skole ;
+    skos:definition "skole som tilbyr videregående opplæring og eies av en fylkeskommune"@nb ;
+    skos:prefLabel "videregående skole"@nb, "vidaregåande skule"@nn ;
+    dcat:contactPoint kontakt:begrepsforvaltning ;
+    skosno:isFromConceptIn [ a skosno:AssociativeConceptRelation ;
+            skosno:hasToConcept ex:fylkeskommune ;
+            skosno:relationRole "har skoleeier"@nb, "har skuleeigar"@nn ] .
+
+ex:fylkeskommune a skos:Concept ;
+    dcterms:identifier "https://example.org/begrep/fylkeskommune"^^xsd:anyURI ;
+    dcterms:publisher virksomhet:modellforvalter ;
+    xkos:specializes ex:organisasjon ;
+    skos:definition "folkevalgt offentlig organisasjon som ivaretar politisk styring og forvaltning på fylkesnivå"@nb ;
+    skos:prefLabel "fylkeskommune"@nb, "fylkeskommune"@nn ;
+    dcat:contactPoint kontakt:begrepsforvaltning .
+
+ex:kommune a skos:Concept ;
+    dcterms:identifier "https://example.org/begrep/kommune"^^xsd:anyURI ;
+    dcterms:publisher virksomhet:modellforvalter ;
+    xkos:specializes ex:organisasjon ;
+    skos:definition "folkevalgt offentlig organisasjon som ivaretar politisk styring og forvaltning på kommunenivå"@nb ;
+    skos:prefLabel "kommune"@nb, "kommune"@nn ;
+    dcat:contactPoint kontakt:begrepsforvaltning .
+
+ex:organisasjon a skos:Concept ;
+    dcterms:identifier "https://example.org/begrep/organisasjon"^^xsd:anyURI ;
+    dcterms:publisher virksomhet:modellforvalter ;
+    xkos:generalizes ex:fylkeskommune,
+        ex:kommune,
+        ex:skole ;
+    skos:definition "sammenslutning som er organisert for å utføre oppgaver eller nå felles mål"@nb ;
+    skos:prefLabel "organisasjon"@nb, "organisasjon"@nn ;
+    dcat:contactPoint kontakt:begrepsforvaltning .
+
+ex:skole a skos:Concept ;
+    dcterms:identifier "https://example.org/begrep/skole"^^xsd:anyURI ;
+    dcterms:publisher virksomhet:modellforvalter ;
+    xkos:generalizes ex:ungdomsskole,
+        ex:videregåendeskole ;
+    xkos:specializes ex:organisasjon ;
+    skos:definition "organisasjon som tilbyr organisert opplæring til elever"@nb ;
+    skos:prefLabel "skole"@nb, "skule"@nn ;
+    dcat:contactPoint kontakt:begrepsforvaltning ;
+    skosno:isFromConceptIn [ a skosno:AssociativeConceptRelation ;
+            skosno:hasToConcept ex:organisasjon ;
+            skosno:relationRole "har skoleeier"@nb, "har skuleeigar"@nn ] .
+
+kontakt:begrepsforvaltning a vcard:Group ;
+    vcard:fn "Begrepsforvaltning"@nb ;
+    vcard:hasEmail <mailto:begrep@example.org> .
+
+virksomhet:modellforvalter a org:Organization ;
+    rdfs:label "SAMT-BU"@nb .
+

@@ -1,0 +1,67 @@
+id: https://example.org/domenemodell/toppontologi
+name: toppontologi
+title: Toppontologi
+description: Generelle begreper for personer og virksomheter.
+
+prefixes:
+  linkml: https://w3id.org/linkml/
+  ex: https://example.org/domenemodell/
+
+imports:
+  - linkml:types
+
+default_prefix: ex
+default_range: string
+
+classes:
+  FysiskPerson:
+    title: Fysisk person
+    description: En fysisk person som kan inneha ulike roller.
+    attributes:
+      identifikasjonsnummer:
+        description: En unik personidentifikator, for eksempel fødselsnummer eller d-nummer.
+      fulltNavn:
+        description: Fullstendig navn, sammensatt av fornavn, eventuelle mellomnavn og etternavn.
+      fornavn:
+        description: Fornavn registrert i Folkeregisteret eller tilsvarende register.
+      mellomnavn:
+        description: Eventuelle mellomnavn mellom fornavn og etternavn.
+      etternavn:
+        description: Personens familienavn eller slektsnavn.
+      biologiskKjønn:
+        description: Personens biologiske kjønn.
+      juridiskKjønn:
+        description: Personens juridiske kjønn.
+      bostedsadresse:
+        description: Adressen der personen er registrert som bosatt.
+      folkeregistrertAdresse:
+        description: Personens offisielt registrerte bostedsadresse i Folkeregisteret.
+      statsborgerskap:
+        description: Det eller de landene personen har statsborgerskap i.
+        multivalued: true
+      fødselsdato:
+        description: Datoen personen er født.
+        range: date
+      sivilstand:
+        description: Juridisk status med hensyn til ekteskap eller registrert partnerskap.
+
+  Virksomhet:
+    description: En virksomhet som kan spesialiseres i domenelagene.
+    attributes:
+      organisasjonsnummer:
+        description: Nisifret identifikator for en enhet registrert i Enhetsregisteret.
+        pattern: '^[0-9]{9}$'
+      navn:
+        description: Virksomhetens offisielt registrerte navn.
+      organisasjonsform:
+        description: Virksomhetens juridiske organisering.
+      næringskode:
+        description: Kode for virksomhetens økonomiske aktivitet.
+      besøksadresse:
+        description: Den fysiske adressen der virksomheten eller underenheten er lokalisert.
+      postadresse:
+        description: Virksomhetens postadresse.
+      kontaktinformasjon:
+        description: Elektronisk kontaktinformasjon, som telefonnummer, e-post eller nettside.
+        multivalued: true
+

@@ -1,0 +1,24 @@
+id: https://example.org/domenemodell/opplaering
+name: opplaering
+title: Underdomene for opplæring
+description: Spesialiseringer fra det nederste laget i Miro-skissen.
+
+prefixes:
+  linkml: https://w3id.org/linkml/
+  ex: https://example.org/domenemodell/
+
+imports:
+  - 2.domenekjerne
+
+default_prefix: ex
+default_range: string
+
+classes:
+  Enkeltkarakter:
+    description: Et resultat uttrykt som en enkelt karakter.
+    is_a: Resultat
+
+  Vitnemaal:
+    title: Vitnemål
+    description: Dokumentasjon av oppnådde resultater fra opplæring.
+    is_a: Dokumentasjon

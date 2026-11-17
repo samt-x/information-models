@@ -1,0 +1,11 @@
+{
+  "emeraldwalk.runonsave": {
+    "commands": [
+      {
+        "match": "[/\\\\]models[/\\\\]eksempel[/\\\\]skos[/\\\\].*\\.ttl$",
+        "cmd": "uv run \"${workspaceFolder}/scripts/generate_concept_diagram.py\" \"${file}\" --output \"${fileDirname}/${fileBasenameNoExt}.md\"",
+        "autoShowOutputPanel": "error"
+      }
+    ]
+  }
+}
