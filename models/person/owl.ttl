@@ -14,8 +14,8 @@
 
 ex:Person a owl:Class;
 rdfs:label "person"@nb, "person"@nn, "person"@en ;
-owl:equivalentClass <http://www.w3.org/ns/person#Person>
-rdfs:isDefinedBy <http://data.norge.no/[digdirs orgnr]> ;
+owl:equivalentClass <http://www.w3.org/ns/person#Person> ;
+# rdfs:isDefinedBy <http://data.norge.no/[digdirs orgnr]> ;
 . 
 
 ex:PersonId a owl:Class ; 
@@ -32,7 +32,7 @@ rdfs:label "fornavn"@nb, "førenamn"@nn, "given name"@en ;
 rdfs:domain ex:Person ; ##vise til en bredere klasse? owl:thing?
 rdfs:range rdfs:literal ;
 owl:equivalentProperty foaf:givenName ;
-rdfs:isDefinedBy <http://data.norge.no/[digdirs orgnr]> ;
+# rdfs:isDefinedBy <http://data.norge.no/[digdirs orgnr]> ;
 .
 
 ex:middleName a owl:DataTypeProperty ;
@@ -40,7 +40,7 @@ rdfs:label "mellomnavn"@nb, "mellomnamn"@nn, "middle name"@en ;
 rdfs:domain ex:personnavn ; ## Vise til en bredere klasse? owl:thing?
 rdfs:range rdfs:literal ;
 owl:equivalentProperty dc:alternativeName ;
-rdfs:isDefinedBy <http://data.norge.no/[digdirs orgnr]> ;
+# rdfs:isDefinedBy <http://data.norge.no/[digdirs orgnr]> ;
 .
 
 ex:familyName a owl:DataTypeProperty ; 
@@ -48,7 +48,7 @@ rdfs:label "etternavn"@nb, "etternamn"@nn, "family name"@en ;
 rdfs:domain ex:personnavn ; 
 rdfs:range rdfs:literal ; 
 owl:equivalentProperty dc:familyName ;
-rdfs:isDefinedBy <http://data.norge.no/[digdirs orgnr]> ;
+# rdfs:isDefinedBy <http://data.norge.no/[digdirs orgnr]> ;
 .
 
 ex:personId a owl:ObjectProperty ;
@@ -79,9 +79,9 @@ rdfs:range rdfs:Literal ;
 # Examples
 ############################################################
 
-(uri for person) a ex:person
+[] a ex:Person ;
 
 ex:givenName "" ;
 ex:middleName "" ; 
-ex:familyName "" ;
+ex:familyName "" .
 

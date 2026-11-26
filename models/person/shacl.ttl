@@ -13,37 +13,37 @@ sh:property rule:Person-givenName, rule:Person-Person-ID ;
 
 rule:Person a sh:NodeShape ; 
 sh:targetClass ex:Person ; 
-sh:property rule:Person-given-name, rule:Person-family-name, rule:Person-middle-name, rule:Person-has-person-id,  ;
+sh:property rule:Person-given-name, rule:Person-family-name, rule:Person-middle-name, rule:Person-has-person-id ;
 .
 
-rule:Person-family-name ; 
+rule:Person-family-name a sh:PropertyShape ;
 sh:path ex:familyName ;
 sh:datatype xsd:string ; 
 sh:minCount 1 ;
 sh:maxCount 1 ;
 .
 
-rule:Person-given-name ; 
+rule:Person-given-name a sh:PropertyShape ;
 sh:path ex:givenName ;
 sh:datatype xsd:string ; 
 sh:minCount 1 ;
 sh:maxCount 1 ;
 .
 
-rule:Person-middlename ; 
+rule:Person-middlename a sh:PropertyShape ;
 sh:path ex:middlename ;
 sh:datatype xsd:string ;
 sh:maxCount 1 ;
 .
 
-rule:Person-PersonId ;
+rule:Person-PersonId a sh:PropertyShape ;
 sh:path ex:hasPersonId ;
 sh:minCount 1 ; 
 sh:maxCount 1 ; 
 sh:or (rule:PersonID-ssn rule:PersonID-dnr rule:PersonID-fictionalId) ##usikker på om disse kan opptre samtidig på samme person. 
 .
 
-rule:PersonId-fnr ; ##burde vi ha med mer info, som gyldighet?
+rule:PersonId-fnr a sh:PropertyShape ; ##burde vi ha med mer info, som gyldighet?
 sh:path ex:fnr ; 
 sh:datatype xsd:string ;
 sh:minLength 11 ;
@@ -52,7 +52,7 @@ sh:minCount 1 ;
 sh:maxCount 1 ;
 . 
 
-rule:PersonId-dnr ; ##burde vi ha med mer info, som gyldighet? Dnr er gyldig i 6 mnd.
+rule:PersonId-dnr a sh:PropertyShape ; ##burde vi ha med mer info, som gyldighet? Dnr er gyldig i 6 mnd.
 sh:path ex:dnr ;
 sh:datatype xsd:string ;
 sh:minLength 11 ;
@@ -61,11 +61,11 @@ sh:minCount 1 ;
 sh:maxCount 1 ; #mulig å beskrive regler for oppbygging av d-nr? Hensiktmessig?
 .
 
-rule:PersonId-fictionalId ; ##burde vi ha med mer info, som gyldighet?
+rule:PersonId-fictionalId a sh:PropertyShape ; ##burde vi ha med mer info, som gyldighet?
 sh:path ex:fictionalIDnr ;
-sh:datatype xsd:string
-minCount 1 ;
-maxCount 1 ; 
+sh:datatype xsd:string ;
+sh:minCount 1 ;
+sh:maxCount 1 ;
 .
 
 
