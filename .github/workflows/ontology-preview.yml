@@ -1,10 +1,12 @@
-name: Forhåndsvis TTL-modellene
+name: Forhåndsvis TTL- og LinkML-modellene
 
 on:
   pull_request:
     branches: [main]
     paths:
       - '**/*.ttl'
+      - 'models/eksempel/linkml/*.yaml'
+      - 'scripts/linkml-mkdocs.yml'
       - 'preview/**'
       - .github/workflows/ontology-preview.yml
       - .github/workflows/actions.lock
@@ -59,6 +61,15 @@ jobs:
           fi
           explorer build --title 'Informasjonsmodeller' -o /site/model.json -- "${valid_files[@]}"
 
+      - name: Bygg LinkML-dokumentasjon
+        run: |
+          python3 -m venv "$RUNNER_TEMP/linkml-venv"
+          source "$RUNNER_TEMP/linkml-venv/bin/activate"
+          python -m pip install linkml==1.9.5 linkml-runtime==1.9.5 mkdocs==1.6.1 mkdocs-material==9.6.22
+          export LINKML_DOCS_DIR="$RUNNER_TEMP/linkml-docs"
+          gen-doc --render-imports -d "$LINKML_DOCS_DIR" models/eksempel/linkml/domenemodell.yaml
+          mkdocs build --strict -f scripts/linkml-mkdocs.yml -d "$PWD/preview/linkml"
+
       - name: Installer Netlify CLI
         if: github.event.pull_request.head.repo.full_name == github.repository
         run: npm install --global netlify-cli@27.20.1
@@ -69,7 +80,8 @@ jobs:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
         run: |
           netlify deploy --no-build --dir=preview --site=information-models --alias="pr-${PR_NUMBER}"
-          echo "Ny versjon er publisert til <https://pr-${PR_NUMBER}--information-models.netlify.app/>." > "$RUNNER_TEMP/pr-comment.md"
+          preview_url="https://pr-${PR_NUMBER}--information-models.netlify.app"
+          echo "Forhåndsvis [TTL-modellene i Ontology Explorer]($preview_url/) eller [LinkML-dokumentasjonen]($preview_url/linkml/)." > "$RUNNER_TEMP/pr-comment.md"
 
       - name: Rapporter resultatet
         if: ${{ !cancelled() }}
