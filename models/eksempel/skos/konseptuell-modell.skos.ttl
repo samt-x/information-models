@@ -2,6 +2,7 @@
 # Eksempelopplysninger og definisjoner er illustrative.
 @prefix ex: <https://example.org/begrep/> .
 @prefix samling: <https://example.org/begrepssamling/> .
+@prefix system: <https://example.org/begrepssystem/> .
 @prefix virksomhet: <https://example.org/virksomhet/> .
 @prefix kontakt: <https://example.org/kontaktpunkt/> .
 @prefix dcat: <http://www.w3.org/ns/dcat#> .
@@ -29,7 +30,13 @@ samling:skole a skos:Collection ;
         ex:videregåendeskole ;
     dcat:contactPoint kontakt:begrepsforvaltning .
 
+system:skole a skos:ConceptScheme ;
+    skos:prefLabel "Begrepssystem for skoledomenet"@nb,
+        "Omgrepssystem for skuledomenet"@nn .
+
 ex:elev a skos:Concept ;
+    skos:inScheme system:skole ;
+    skos:broader ex:person ;
     dcterms:identifier "https://example.org/begrep/elev"^^xsd:anyURI ;
     dcterms:publisher virksomhet:modellforvalter ;
     xkos:specializes ex:person ;
@@ -41,6 +48,7 @@ ex:elev a skos:Concept ;
             skosno:relationRole "går på"@nb, "går på"@nn ] .
 
 ex:person a skos:Concept ;
+    skos:inScheme system:skole ;
     dcterms:identifier "https://example.org/begrep/person"^^xsd:anyURI ;
     dcterms:publisher virksomhet:modellforvalter ;
     xkos:generalizes ex:elev ;
@@ -49,6 +57,8 @@ ex:person a skos:Concept ;
     dcat:contactPoint kontakt:begrepsforvaltning .
 
 ex:ungdomsskole a skos:Concept ;
+    skos:inScheme system:skole ;
+    skos:broader ex:skole ;
     dcterms:identifier "https://example.org/begrep/ungdomsskole"^^xsd:anyURI ;
     dcterms:publisher virksomhet:modellforvalter ;
     xkos:specializes ex:skole ;
@@ -60,6 +70,8 @@ ex:ungdomsskole a skos:Concept ;
             skosno:relationRole "har skoleeier"@nb, "har skuleeigar"@nn ] .
 
 ex:videregåendeskole a skos:Concept ;
+    skos:inScheme system:skole ;
+    skos:broader ex:skole ;
     dcterms:identifier "https://example.org/begrep/videregåendeskole"^^xsd:anyURI ;
     dcterms:publisher virksomhet:modellforvalter ;
     xkos:specializes ex:skole ;
@@ -71,6 +83,8 @@ ex:videregåendeskole a skos:Concept ;
             skosno:relationRole "har skoleeier"@nb, "har skuleeigar"@nn ] .
 
 ex:fylkeskommune a skos:Concept ;
+    skos:inScheme system:skole ;
+    skos:broader ex:organisasjon ;
     dcterms:identifier "https://example.org/begrep/fylkeskommune"^^xsd:anyURI ;
     dcterms:publisher virksomhet:modellforvalter ;
     xkos:specializes ex:organisasjon ;
@@ -79,6 +93,8 @@ ex:fylkeskommune a skos:Concept ;
     dcat:contactPoint kontakt:begrepsforvaltning .
 
 ex:kommune a skos:Concept ;
+    skos:inScheme system:skole ;
+    skos:broader ex:organisasjon ;
     dcterms:identifier "https://example.org/begrep/kommune"^^xsd:anyURI ;
     dcterms:publisher virksomhet:modellforvalter ;
     xkos:specializes ex:organisasjon ;
@@ -87,6 +103,7 @@ ex:kommune a skos:Concept ;
     dcat:contactPoint kontakt:begrepsforvaltning .
 
 ex:organisasjon a skos:Concept ;
+    skos:inScheme system:skole ;
     dcterms:identifier "https://example.org/begrep/organisasjon"^^xsd:anyURI ;
     dcterms:publisher virksomhet:modellforvalter ;
     xkos:generalizes ex:fylkeskommune,
@@ -97,6 +114,8 @@ ex:organisasjon a skos:Concept ;
     dcat:contactPoint kontakt:begrepsforvaltning .
 
 ex:skole a skos:Concept ;
+    skos:inScheme system:skole ;
+    skos:broader ex:organisasjon ;
     dcterms:identifier "https://example.org/begrep/skole"^^xsd:anyURI ;
     dcterms:publisher virksomhet:modellforvalter ;
     xkos:generalizes ex:ungdomsskole,

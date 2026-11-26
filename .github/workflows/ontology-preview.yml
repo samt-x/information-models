@@ -1,0 +1,46 @@
+name: Forhåndsvis begrepsmodellen
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - models/eksempel/skos/konseptuell-modell.skos.ttl
+      - 'preview/**'
+      - .github/workflows/ontology-preview.yml
+      - .github/workflows/actions.lock
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ontology-preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Hent modellen fra PR-en
+        uses: actions/checkout@v4.4.0
+        with:
+          persist-credentials: false
+
+      - name: Bygg modellen
+        run: |
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -v "$PWD/models/eksempel/skos:/data:ro" -v "$PWD/preview:/site" \
+            ghcr.io/matdata-eu/ontology-explorer@sha256:658388bc15286e18b97106c1cf5df5d6fa009784a272a34bf758650a38bf55a9 \
+            build konseptuell-modell.skos.ttl --title 'Begrepsmodell for oppvekst og læring' -o /site/model.json
+
+      - name: Installer Netlify CLI
+        if: github.event.pull_request.head.repo.full_name == github.repository
+        run: npm install --global netlify-cli@27.20.1
+
+      - name: Publiser forhåndsvisningen
+        if: github.event.pull_request.head.repo.full_name == github.repository
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          netlify deploy --no-build --dir=preview --site=information-models --alias="pr-${PR_NUMBER}"
+          echo "<https://pr-${PR_NUMBER}--information-models.netlify.app/>" >> "$GITHUB_STEP_SUMMARY"
