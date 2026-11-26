@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="nb">
+  <head>
+    <meta charset="utf-8">
+    <title>Ontology Explorer</title>
+    <script>
+      const viewer = new URL("https://matdata-eu.github.io/ontology-explorer/");
+      viewer.search = location.search;
+      const source = viewer.searchParams.get("src") || "../model.json";
+      viewer.searchParams.set("src", new URL(source, location.href).href);
+      if (!viewer.searchParams.has("lang")) viewer.searchParams.set("lang", "nb");
+      viewer.hash = location.hash;
+      location.replace(viewer.href);
+    </script>
+  </head>
+  <body>
+    <noscript>Aktiver JavaScript for å åpne Ontology Explorer.</noscript>
+  </body>
+</html>
