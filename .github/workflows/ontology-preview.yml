@@ -1,16 +1,17 @@
-name: Forhåndsvis begrepsmodellen
+name: Forhåndsvis TTL-modellene
 
 on:
   pull_request:
     branches: [main]
     paths:
-      - models/eksempel/skos/konseptuell-modell.skos.ttl
+      - '**/*.ttl'
       - 'preview/**'
       - .github/workflows/ontology-preview.yml
       - .github/workflows/actions.lock
 
 permissions:
   contents: read
+  pull-requests: write
 
 concurrency:
   group: ontology-preview-${{ github.event.pull_request.number }}
@@ -19,18 +20,44 @@ concurrency:
 jobs:
   preview:
     runs-on: ubuntu-latest
+    env:
+      PR_NUMBER: ${{ github.event.pull_request.number }}
     steps:
       - name: Hent modellen fra PR-en
         uses: actions/checkout@v4.4.0
         with:
           persist-credentials: false
 
-      - name: Bygg modellen
+      - name: Valider TTL-filene og bygg modellen
         run: |
-          docker run --rm --user "$(id -u):$(id -g)" \
-            -v "$PWD/models/eksempel/skos:/data:ro" -v "$PWD/preview:/site" \
-            ghcr.io/matdata-eu/ontology-explorer@sha256:658388bc15286e18b97106c1cf5df5d6fa009784a272a34bf758650a38bf55a9 \
-            build konseptuell-modell.skos.ttl --title 'Begrepsmodell for oppvekst og læring' -o /site/model.json
+          image=ghcr.io/matdata-eu/ontology-explorer@sha256:658388bc15286e18b97106c1cf5df5d6fa009784a272a34bf758650a38bf55a9
+          docker pull "$image"
+          explorer() {
+            docker run --rm --user "$(id -u):$(id -g)" \
+              -v "$PWD:/data:ro" -v "$PWD/preview:/site" "$image" "$@"
+          }
+
+          valid_files=()
+          errors="$RUNNER_TEMP/ttl-errors.md"
+          while IFS= read -r -d '' file; do
+            if explorer stats -- "./$file" > /dev/null 2> "$RUNNER_TEMP/parser-error"; then
+              valid_files+=("./$file")
+            else
+              status=$?
+              if (( status != 1 )); then
+                cat "$RUNNER_TEMP/parser-error" >&2
+                exit "$status"
+              fi
+              { printf '%s\n' "$file"; cat "$RUNNER_TEMP/parser-error"; } | sed 's/^/    /' >> "$errors"
+              echo >> "$errors"
+            fi
+          done < <(git ls-files -z -- '*.ttl')
+
+          if (( ${#valid_files[@]} == 0 )); then
+            echo 'Ingen gyldige TTL-filer å publisere.' > "$RUNNER_TEMP/pr-comment.md"
+            exit 1
+          fi
+          explorer build --title 'Informasjonsmodeller' -o /site/model.json -- "${valid_files[@]}"
 
       - name: Installer Netlify CLI
         if: github.event.pull_request.head.repo.full_name == github.repository
@@ -40,7 +67,28 @@ jobs:
         if: github.event.pull_request.head.repo.full_name == github.repository
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
           netlify deploy --no-build --dir=preview --site=information-models --alias="pr-${PR_NUMBER}"
-          echo "<https://pr-${PR_NUMBER}--information-models.netlify.app/>" >> "$GITHUB_STEP_SUMMARY"
+          echo "Ny versjon er publisert til <https://pr-${PR_NUMBER}--information-models.netlify.app/>." > "$RUNNER_TEMP/pr-comment.md"
+
+      - name: Rapporter resultatet
+        if: ${{ !cancelled() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SAME_REPO: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
+        run: |
+          report="$RUNNER_TEMP/pr-comment.md"
+          if [[ -s "$RUNNER_TEMP/ttl-errors.md" ]]; then
+            {
+              echo
+              echo 'Disse TTL-filene ble utelatt:'
+              echo
+              cat "$RUNNER_TEMP/ttl-errors.md"
+            } >> "$report"
+          fi
+          if [[ -s "$report" ]]; then
+            cat "$report" >> "$GITHUB_STEP_SUMMARY"
+            if [[ "$SAME_REPO" == true ]]; then
+              gh pr comment "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --body-file "$report"
+            fi
+          fi
