@@ -1,22 +1,26 @@
-name: Forhåndsvis TTL- og LinkML-modellene
+name: Bygg og publiser TTL- og LinkML-modellene
 
 on:
   pull_request:
     branches: [main]
+    types: [opened, synchronize, reopened, closed]
+  push:
+    branches: [main]
     paths:
       - '**/*.ttl'
-      - 'models/eksempel/linkml/*.yaml'
+      - '**/*.yaml'
       - 'scripts/linkml-mkdocs.yml'
       - 'preview/**'
       - .github/workflows/ontology-preview.yml
       - .github/workflows/actions.lock
 
 permissions:
-  contents: read
+  contents: write
+  pages: write
   pull-requests: write
 
 concurrency:
-  group: ontology-preview-${{ github.event.pull_request.number }}
+  group: ontology-preview-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -24,13 +28,15 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PR_NUMBER: ${{ github.event.pull_request.number }}
+      PAGES_DIR: ${{ github.event_name == 'pull_request' && format('pr-preview/pr-{0}', github.event.number) || '' }}
     steps:
-      - name: Hent modellen fra PR-en
+      - name: Hent modellene
         uses: actions/checkout@v4.4.0
         with:
           persist-credentials: false
 
       - name: Valider TTL-filene og bygg modellen
+        if: github.event.action != 'closed'
         run: |
           image=ghcr.io/matdata-eu/ontology-explorer@sha256:658388bc15286e18b97106c1cf5df5d6fa009784a272a34bf758650a38bf55a9
           docker pull "$image"
@@ -56,12 +62,13 @@ jobs:
           done < <(git ls-files -z -- '*.ttl')
 
           if (( ${#valid_files[@]} == 0 )); then
-            echo 'Ingen gyldige TTL-filer å publisere.' > "$RUNNER_TEMP/pr-comment.md"
+            echo 'Ingen gyldige TTL-filer å publisere.' > "$RUNNER_TEMP/deploy-report.md"
             exit 1
           fi
           explorer build --title 'Informasjonsmodeller' -o /site/model.json -- "${valid_files[@]}"
 
       - name: Bygg LinkML-dokumentasjon
+        if: github.event.action != 'closed'
         run: |
           python3 -m venv "$RUNNER_TEMP/linkml-venv"
           source "$RUNNER_TEMP/linkml-venv/bin/activate"
@@ -70,26 +77,38 @@ jobs:
           gen-doc --render-imports -d "$LINKML_DOCS_DIR" models/eksempel/linkml/domenemodell.yaml
           mkdocs build --strict -f scripts/linkml-mkdocs.yml -d "$PWD/preview/linkml"
 
-      - name: Installer Netlify CLI
-        if: github.event.pull_request.head.repo.full_name == github.repository
-        run: npm install --global netlify-cli@27.20.1
+      - name: Klargjør tom mappe for å fjerne en lukket PR
+        if: github.event.action == 'closed'
+        run: mkdir -p empty-preview
 
-      - name: Publiser forhåndsvisningen
-        if: github.event.pull_request.head.repo.full_name == github.repository
+      - name: Oppdater gh-pages
+        if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
+        uses: JamesIves/github-pages-deploy-action@v4.9.0
+        with:
+          branch: gh-pages
+          folder: ${{ github.event.action == 'closed' && 'empty-preview' || 'preview' }}
+          target-folder: ${{ env.PAGES_DIR }}
+          clean-exclude: /pr-preview/
+          force: false
+
+      - name: Start publisering på GitHub Pages
+        if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
         env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
         run: |
-          netlify deploy --no-build --dir=preview --site=information-models --alias="pr-${PR_NUMBER}"
-          preview_url="https://pr-${PR_NUMBER}--information-models.netlify.app"
-          echo "Forhåndsvis [TTL-modellene i Ontology Explorer]($preview_url/) eller [LinkML-dokumentasjonen]($preview_url/linkml/)." > "$RUNNER_TEMP/pr-comment.md"
+          # Push med GITHUB_TOKEN utløser ikke automatisk et Pages-bygg.
+          gh api --method POST "repos/$GITHUB_REPOSITORY/pages/builds" --silent
+
+      - name: Lag lenker til modellene
+        if: github.event_name == 'push' || (github.event.action != 'closed' && github.event.pull_request.head.repo.full_name == github.repository)
+        run: |
+          base_url="https://samt-x.github.io/information-models${PAGES_DIR:+/$PAGES_DIR}"
+          echo "GitHub Pages bygger [Ontology Explorer]($base_url/) og [LinkML-dokumentasjonen]($base_url/linkml/)." > "$RUNNER_TEMP/deploy-report.md"
 
       - name: Rapporter resultatet
         if: ${{ !cancelled() }}
-        env:
-          GH_TOKEN: ${{ github.token }}
-          SAME_REPO: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
         run: |
-          report="$RUNNER_TEMP/pr-comment.md"
+          report="$RUNNER_TEMP/deploy-report.md"
           if [[ -s "$RUNNER_TEMP/ttl-errors.md" ]]; then
             {
               echo
@@ -100,7 +119,14 @@ jobs:
           fi
           if [[ -s "$report" ]]; then
             cat "$report" >> "$GITHUB_STEP_SUMMARY"
-            if [[ "$SAME_REPO" == true ]]; then
-              gh pr comment "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --body-file "$report"
-            fi
+          fi
+
+      - name: Kommenter i PR-en
+        if: ${{ !cancelled() && github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          report="$RUNNER_TEMP/deploy-report.md"
+          if [[ -s "$report" ]]; then
+            gh pr comment "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --body-file "$report"
           fi
