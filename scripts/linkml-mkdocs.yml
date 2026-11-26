@@ -1,0 +1,12 @@
+site_name: Oppvekst og læring
+docs_dir: !ENV LINKML_DOCS_DIR
+theme:
+  name: material
+  language: nb
+  font: false
+markdown_extensions:
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
