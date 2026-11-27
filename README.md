@@ -1,28 +1,16 @@
 # Information Models
 
-## Utforsk modellene
+[![Publisering på main](https://github.com/samt-x/information-models/actions/workflows/ontology-preview.yml/badge.svg?branch=main&event=push)](https://github.com/samt-x/information-models/actions/workflows/ontology-preview.yml?query=branch%3Amain+event%3Apush)
+[![LinkML-validering på main](https://github.com/samt-x/information-models/actions/workflows/validate-linkml.yml/badge.svg?branch=main&event=push)](https://github.com/samt-x/information-models/actions/workflows/validate-linkml.yml?query=branch%3Amain+event%3Apush)
+
+## LinkML-modeller
+
+Disse modellene er skrevet i LinkML-format og OWL-modeller og dokumentasjon blir generert med GitHub Actions automatisk ved endringer.
+
+- [Kjerne](linkml/kjerne.yaml)
+- [Opplæring](linkml/opplaering.yaml)
+
+## Utforsk dokumentasjon og OWL-modeller
 
 - [LinkML-modeller – dokumentasjon, nedlastbare OWL-filer i Turtle og visning per skjema](https://samt-x.github.io/information-models/)
-- [Ontology Explorer – utforsk TTL-modellene](https://samt-x.github.io/information-models/viewer/)
-
-## Eksempelmodeller
-
-### LinkML
-
-[Oppvekst og læring – tre lag](models/eksempel/linkml/README.md)
-
-[Domenemodell – med felter](models/eksempel/linkml/domenemodell.md)
-
-```bash
-uv run scripts/generate_domain_diagrams.py models/eksempel/linkml/domenemodell.yaml \
-  --output models/eksempel/linkml/domenemodell.md
-```
-
-### SKOS-AP-NO
-
-[Konseptuell modell – begrepsdiagram](models/eksempel/skos/konseptuell-modell.skos.md)
-
-```bash
-uv run scripts/generate_concept_diagram.py models/eksempel/skos/konseptuell-modell.skos.ttl \
-  --output models/eksempel/skos/konseptuell-modell.skos.md
-```
+- [Ontology Explorer – utforsk OWL-modellene](https://samt-x.github.io/information-models/viewer/)

@@ -6,6 +6,8 @@ workflows:
     '.github/workflows/ontology-preview.yml':
         - 'actions/checkout@v4.4.0'
         - 'jamesives/github-pages-deploy-action@v4.9.0'
+    '.github/workflows/validate-linkml.yml':
+        - 'actions/checkout@v4.4.0'
 dependencies:
     'actions/checkout@v4.4.0':
         ref: 'v4.4.0'

@@ -1,4 +1,4 @@
-name: Bygg og publiser TTL- og LinkML-modellene
+name: Publiser LinkML-dokumentasjon og TTL-modeller
 
 on:
   pull_request:

@@ -1,0 +1,30 @@
+name: Valider LinkML
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'linkml/**'
+      - '.github/workflows/validate-linkml.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'linkml/**'
+      - '.github/workflows/validate-linkml.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.4.0
+        with:
+          persist-credentials: false
+      - name: Valider skjemaene mot LinkML-metamodellen
+        run: |
+          python3 -m venv "$RUNNER_TEMP/linkml-venv"
+          source "$RUNNER_TEMP/linkml-venv/bin/activate"
+          python -m pip install linkml==1.9.5 linkml-runtime==1.9.5
+          linkml lint --validate-only linkml/
