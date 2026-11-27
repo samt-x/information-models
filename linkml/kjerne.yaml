@@ -1,0 +1,465 @@
+# Kilder: kjerne_v0.5.0.ttl og kjerne-shapes_v0.5.1.ttl.
+# Strukturformene setter ingen minimums- eller maksimumskardinalitet.
+id: https://modell.samt-bu.no/kjerne
+name: kjerne
+version: 0.5.0
+license: http://publications.europa.eu/resource/authority/licence/CC_BY_4_0
+title: Kjernemodul for aktører
+description: Felles klasser og egenskaper for aktører i offentlig sektor. Erstatter Felles informasjonsmodell for
+  Person og Enhet.
+annotations:
+  title_nn: Kjernemodul for aktørar
+  description_nn: Felles klassar og eigenskapar for aktørar i offentleg sektor. Erstattar Felles informasjonsmodell
+    for Person og Enhet.
+  title_en: Core module for agents
+  description_en: Shared classes and properties for agents in the Norwegian public sector. Replaces the common information
+    model for Person and Entity.
+imports:
+- linkml:types
+prefixes:
+  linkml: https://w3id.org/linkml/
+  kjerne: https://modell.samt-bu.no/kjerne/
+  foaf: http://xmlns.com/foaf/0.1/
+  person: http://www.w3.org/ns/person#
+  org: http://www.w3.org/ns/org#
+  legal: http://www.w3.org/ns/legal#
+  cv: http://data.europa.eu/m8g/
+  adms: http://www.w3.org/ns/adms#
+  locn: http://www.w3.org/ns/locn#
+  dcterms: http://purl.org/dc/terms/
+  skos: http://www.w3.org/2004/02/skos/core#
+default_prefix: kjerne
+
+classes:
+
+  Aktor:
+    class_uri: foaf:Agent
+    title: aktør
+    description: Entitet som kan utføre handlinger.
+    annotations:
+      title_nn: aktør
+      description_nn: Entitet som kan utføre handlingar.
+
+  FysiskPerson:
+    class_uri: person:Person
+    title: fysisk person
+    description: Et enkeltmenneske som kan være levende eller død, men ikke oppdiktet.
+    annotations:
+      title_nn: fysisk person
+      description_nn: Eit enkeltmenneske som kan vere levande eller død, men ikkje oppdikta.
+    is_a: Aktor
+    attributes:
+
+      fodselsdato:
+        slot_uri: cv:birthDate
+        title: fødselsdato
+        description: Tidspunktet da personen ble født.
+        annotations:
+          title_nn: fødselsdato
+          description_nn: Tidspunktet då personen vart fødd.
+          title_en: date of birth
+          description_en: The point in time on which the Person was born.
+        range: Any
+        multivalued: true
+
+      kontaktpunkt:
+        slot_uri: cv:contactPoint
+        title: kontaktpunkt
+        description: Den viktigste kontaktinformasjonen for ressursen.
+        annotations:
+          title_nn: kontaktpunkt
+          description_nn: Den viktigaste kontaktinformasjonen for ressursen.
+          title_en: contact point
+          description_en: The main contact information of the resource.
+        range: Kontaktpunkt
+        multivalued: true
+
+      dodsdato:
+        slot_uri: cv:deathDate
+        title: dødsdato
+        description: Tidspunktet da personen døde.
+        annotations:
+          title_nn: dødsdato
+          description_nn: Tidspunktet då personen døydde.
+          title_en: date of death
+          description_en: The point in time on which the Person died.
+        range: Any
+        multivalued: true
+
+      bostedsadresse:
+        slot_uri: cv:domicile
+        title: bostedsadresse
+        description: Stedet personen regner som sitt faste hjem.
+        annotations:
+          title_nn: bustadadresse
+          description_nn: Staden personen reknar som den faste heimen sin.
+          title_en: domicile
+          description_en: The place that the Person treats as permanent home.
+        range: Adresse
+        multivalued: true
+
+      juridiskKjonn:
+        slot_uri: cv:gender
+        title: juridisk kjønn
+        description: Personens identiteter, uttrykk og samfunnsroller.
+        annotations:
+          title_nn: juridisk kjønn
+          description_nn: Identitetane, uttrykka og samfunnsrollene til personen.
+          title_en: gender
+          description_en: The identities, expressions and societal roles of the Person.
+        range: Begrep
+        multivalued: true
+        inlined: false
+
+      biologiskKjonn:
+        slot_uri: cv:sex
+        title: biologisk kjønn
+        description: Organismens biologiske kjønn.
+        annotations:
+          title_nn: biologisk kjønn
+          description_nn: Det biologiske kjønnet til organismen.
+          title_en: sex
+          description_en: The organism's biological sex.
+        range: Begrep
+        multivalued: true
+        inlined: false
+
+      mellomnavn:
+        slot_uri: dcterms:alternative
+        title: mellomnavn
+        description: Ethvert navn personen er kjent under, bortsett fra det fulle navnet.
+        annotations:
+          title_nn: mellomnamn
+          description_nn: Kva som helst namn personen er kjend under, bortsett frå det fulle namnet.
+          title_en: middle name
+          description_en: Any name by which a Person is known, other than their full name.
+        range: Any
+        multivalued: true
+
+      identifikasjonsnummer:
+        slot_uri: dcterms:identifier
+        title: identifikasjonsnummer
+        description: Den entydige, strukturerte referansen til personen.
+        annotations:
+          title_nn: identifikasjonsnummer
+          description_nn: Den eintydige, strukturerte referansen til personen.
+          title_en: identifier
+          description_en: The unambiguous structured reference to the Person.
+        range: Identifikator
+        multivalued: true
+
+      statsborgerskap:
+        slot_uri: person:citizenship
+        title: statsborgerskap
+        description: Jurisdiksjonen som har gitt personen statsborgerrettigheter, som stemmerett, rett til vern
+          fra fellesskapet eller utstedelse av pass.
+        annotations:
+          title_nn: statsborgarskap
+          description_nn: Jurisdiksjonen som har gitt personen statsborgarrettar, som røysterett, rett til vern
+            frå fellesskapen eller utferding av pass.
+          title_en: citizenship
+          description_en: The Jurisdiction that has conferred citizenship rights on the Person such as the right
+            to vote, to receive certain protection from the community or the issuance of a passport.
+        range: Jurisdiksjon
+        multivalued: true
+
+      fodested:
+        slot_uri: person:placeOfBirth
+        title: fødested
+        description: Stedet der personen ble født.
+        annotations:
+          title_nn: fødestad
+          description_nn: Staden der personen vart fødd.
+          title_en: place of birth
+          description_en: The Location where the Person was born.
+        range: Sted
+        multivalued: true
+
+      dodssted:
+        slot_uri: person:placeOfDeath
+        title: dødssted
+        description: Stedet der personen døde.
+        annotations:
+          title_nn: dødsstad
+          description_nn: Staden der personen døydde.
+          title_en: place of death
+          description_en: The Location where the Person died.
+        range: Sted
+        multivalued: true
+
+      folkeregistrertAdresse:
+        slot_uri: person:residency
+        title: folkeregistrert adresse
+        description: Jurisdiksjonen der personen har sin bolig.
+        annotations:
+          title_nn: folkeregistrert adresse
+          description_nn: Jurisdiksjonen der personen har bustaden sin.
+          title_en: residency
+          description_en: Jurisdiction where the Person has their dwelling.
+        range: Jurisdiksjon
+        multivalued: true
+
+      etternavn:
+        slot_uri: foaf:familyName
+        title: etternavn
+        description: Det arvelige etternavnet til en familie.
+        annotations:
+          title_nn: etternamn
+          description_nn: Det arvelege etternamnet til ein familie.
+          title_en: family name
+          description_en: The hereditary surname of a family.
+        range: Any
+        multivalued: true
+
+      fornavn:
+        slot_uri: foaf:givenName
+        title: fornavn
+        description: Navnet eller navnene som identifiserer personen innenfor en familie med felles etternavn.
+        annotations:
+          title_nn: førenamn
+          description_nn: Namnet eller namna som identifiserer personen innanfor ein familie med felles etternamn.
+          title_en: given name
+          description_en: The name(s) that identify the Person within a family with a common surname.
+        range: Any
+        multivalued: true
+
+      fulltNavn:
+        slot_uri: foaf:name
+        title: fullt navn
+        description: Det fullstendige navnet til personen som én tekststreng.
+        annotations:
+          title_nn: fullt namn
+          description_nn: Det fullstendige namnet til personen som éin tekststreng.
+          title_en: full name
+          description_en: The complete name of the Person as one string.
+        range: Any
+        multivalued: true
+
+      opprinneligNavn:
+        slot_uri: kjerne:opprinneligNavn
+        title: opprinnelig navn
+        description: Navn før navneendring av ulike årsaker, for eksempel pikenavn.
+        annotations:
+          title_nn: opphavleg namn
+          title_en: original name
+          description_nn: Namn før namneendring av ulike årsaker, til dømes jentenamn.
+          description_en: Name before a change of name for various reasons, for example maiden name.
+        range: string
+        multivalued: true
+        close_mappings:
+        - person:birthName
+
+      sivilstand:
+        slot_uri: kjerne:sivilstand
+        title: sivilstand
+        description: Personens stilling i forhold til ekteskap eller partnerskap.
+        annotations:
+          title_nn: sivilstand
+          title_en: marital status
+          description_nn: Stillinga til personen i høve til ekteskap eller partnarskap.
+          description_en: The person's status in relation to marriage or partnership.
+        range: Begrep
+        multivalued: true
+        inlined: false
+
+  Virksomhet:
+    class_uri: org:Organization
+    title: organisasjon
+    description: En samling mennesker organisert i et fellesskap eller en annen sosial, kommersiell eller politisk
+      struktur. Gruppen har et felles formål eller en grunn til å eksistere som går ut over de enkelte medlemmene,
+      og den kan opptre som en aktør.
+    annotations:
+      title_nn: organisasjon
+      description_nn: Ei samling menneske organisert i eit fellesskap eller ein annan sosial, kommersiell eller
+        politisk struktur. Gruppa har eit felles føremål eller ein grunn til å eksistere som går ut over dei einskilde
+        medlemene, og ho kan opptre som ein aktør.
+    is_a: Aktor
+    aliases:
+    - virksomhet
+    attributes:
+
+      navn:
+        slot_uri: skos:prefLabel
+        title: navn
+        description: Organisasjonens hovednavn.
+        annotations:
+          title_nn: namn
+          description_nn: Hovudnamnet til organisasjonen.
+          title_en: name
+          description_en: The primary name of the organization.
+        range: Any
+        multivalued: true
+
+      organisasjonsnummer:
+        slot_uri: org:identifier
+        title: organisasjonsnummer
+        description: En identifikator for organisasjonen, for eksempel et organisasjonsnummer.
+        annotations:
+          title_nn: organisasjonsnummer
+          description_nn: Ein identifikator for organisasjonen, til dømes eit organisasjonsnummer.
+          title_en: identifier
+          description_en: Gives an identifier, such as a company registration number, that can be used to uniquely
+            identify the organization.
+        range: Any
+        multivalued: true
+
+  JuridiskEnhet:
+    class_uri: legal:LegalEntity
+    title: juridisk enhet
+    description: En selvstendig næringsdrivende, et selskap eller en organisasjon som har juridiske rettigheter
+      og plikter.
+    annotations:
+      title_nn: juridisk eining
+      description_nn: Ein sjølvstendig næringsdrivande, eit selskap eller ein organisasjon som har juridiske rettar
+        og plikter.
+    attributes:
+
+      naringskode:
+        slot_uri: legal:companyActivity
+        title: næringskode
+        description: Arbeidsområdet den juridiske enheten driver innenfor.
+        annotations:
+          title_nn: næringskode
+          description_nn: Arbeidsområdet den juridiske eininga driv innanfor.
+          title_en: legal entity activity
+          description_en: The area of work in which the Legal Entity is engaged.
+        range: Begrep
+        multivalued: true
+        inlined: false
+
+      organisasjonsform:
+        slot_uri: legal:companyType
+        title: organisasjonsform
+        description: Klassifiseringen av den juridiske enheten som medlem av en bestemt gruppe i forbindelse med
+          rettslig registrering.
+        annotations:
+          title_nn: organisasjonsform
+          description_nn: Klassifiseringa av den juridiske eininga som medlem av ei bestemd gruppe i samband med
+            rettsleg registrering.
+          title_en: legal form type
+          description_en: The classification of the Legal Entity as a member of a particular group in the context
+            of legal registration.
+        range: Begrep
+        multivalued: true
+        inlined: false
+
+      juridiskIdentifikator:
+        slot_uri: legal:legalIdentifier
+        title: organisasjonsnummer
+        description: Den entydige, strukturerte referansen som myndigheten som registrerte den juridiske enheten,
+          har tildelt den.
+        annotations:
+          title_nn: organisasjonsnummer
+          description_nn: Den eintydige, strukturerte referansen som styresmakta som registrerte den juridiske eininga,
+            har tildelt henne.
+          title_en: legal identifier
+          description_en: The unambiguous structured reference assigned to the Legal Entity by the legal authority
+            that registered it.
+        range: Identifikator
+        multivalued: true
+
+      juridiskNavn:
+        slot_uri: legal:legalName
+        title: navn
+        description: Navnet den juridiske enheten er rettslig registrert under.
+        annotations:
+          title_nn: namn
+          description_nn: Namnet den juridiske eininga er rettsleg registrert under.
+          title_en: legal name
+          description_en: The name under which the Legal Entity is legally registered.
+        range: Any
+        multivalued: true
+
+  Rolle:
+    class_uri: kjerne:Rolle
+    title: rolle
+    description: Funksjon som en aktør har i en bestemt sammenheng i en avgrenset periode.
+    annotations:
+      title_nn: rolle
+      description_nn: Funksjon som ein aktør har i ein bestemd samanheng i ein avgrensa periode.
+      title_en: role
+      description_en: Function that an agent holds in a particular context for a limited period.
+    close_mappings:
+    - org:Membership
+    attributes:
+
+      periode:
+        slot_uri: dcterms:temporal
+        title: periode
+        description: Perioden rollen gjelder for.
+        annotations:
+          title_nn: periode
+          description_nn: Perioden rolla gjeld for.
+          title_en: period
+          description_en: The period for which the role applies.
+        range: Tidsperiode
+        multivalued: true
+
+      erRolleFor:
+        slot_uri: kjerne:erRolleFor
+        title: er rolle for
+        description: Angir aktøren som har rollen.
+        annotations:
+          title_nn: er rolle for
+          title_en: is role of
+          description_nn: Angir aktøren som har rolla.
+          description_en: Indicates the agent that holds the role.
+        range: Aktor
+        multivalued: true
+
+  Foresatt:
+    class_uri: kjerne:Foresatt
+    title: foresatt
+    description: Rolle som en fysisk person har når den har ansvar for et barn.
+    annotations:
+      title_nn: føresett
+      description_nn: Rolle som ein fysisk person har når han eller ho har ansvar for eit barn.
+      title_en: guardian
+      description_en: Role that a natural person holds when responsible for a child.
+    is_a: Rolle
+    slot_usage:
+      erRolleFor:
+        range: FysiskPerson
+    attributes:
+
+      erForesattFor:
+        slot_uri: kjerne:erForesattFor
+        title: er foresatt for
+        description: Angir barnet som rollen gjelder.
+        annotations:
+          title_nn: er føresett for
+          title_en: is guardian of
+          description_nn: Angir barnet som rolla gjeld.
+          description_en: Indicates the child to whom the role applies.
+        range: FysiskPerson
+        multivalued: true
+
+  Identifikator:
+    class_uri: adms:Identifier
+
+  Sted:
+    class_uri: dcterms:Location
+
+  Jurisdiksjon:
+    class_uri: dcterms:Jurisdiction
+
+  Adresse:
+    class_uri: locn:Address
+
+  Kontaktpunkt:
+    class_uri: cv:ContactPoint
+
+  Tidsperiode:
+    class_uri: dcterms:PeriodOfTime
+
+  Begrep:
+    class_uri: skos:Concept
+    attributes:
+
+      iri:
+        identifier: true
+        range: uri
+
+  Any:
+    class_uri: linkml:Any
+    description: Åpent verdiområde der strukturformen ikke angir klasse eller datatype.

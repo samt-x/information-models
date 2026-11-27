@@ -1,0 +1,248 @@
+@prefix kjerne:    <https://example.com/kjerne/> .
+@prefix kjerne-sh: <https://example.com/kjerne/shapes/> .
+@prefix person:    <http://www.w3.org/ns/person#> .
+@prefix legal:     <http://www.w3.org/ns/legal#> .
+@prefix org:       <http://www.w3.org/ns/org#> .
+@prefix cv:        <http://data.europa.eu/m8g/> .
+@prefix foaf:      <http://xmlns.com/foaf/0.1/> .
+@prefix adms:      <http://www.w3.org/ns/adms#> .
+@prefix locn:      <http://www.w3.org/ns/locn#> .
+@prefix dcterms:   <http://purl.org/dc/terms/> .
+@prefix owl:       <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs:      <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh:        <http://www.w3.org/ns/shacl#> .
+@prefix skos:      <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd:       <http://www.w3.org/2001/XMLSchema#> .
+
+# =============================================================================
+# Strukturformer for kjernemodulen (v0.5.1)
+# Formene viser hvilke egenskaper som hører til hvilke klasser (beslutning 8).
+# De har bevisst ingen kardinaliteter: strengere krav legges i profiler per
+# bruksområde (beslutning 12).
+# Egenskapsnavn (sh:name) er fra Excel-skjemaet; beskrivelsene (sh:description)
+# er tro oversettelser av Core Person 2.1.2 / Core Business 2.3.0.
+# =============================================================================
+
+<https://example.com/kjerne/shapes>
+    a owl:Ontology ;
+    dcterms:title "Strukturformer for kjernemodulen"@nb ,
+                  "Strukturformer for kjernemodulen"@nn ,
+                  "Structural shapes for the core module"@en ;
+    owl:versionInfo "0.5.1" ;
+    dcterms:issued "2026-11-24"^^xsd:date ;
+    dcterms:publisher <https://organization-catalogue.fellesdatakatalog.digdir.no/organizations/991825827> ;
+    dcterms:license <http://publications.europa.eu/resource/authority/licence/CC_BY_4_0> ;
+    owl:imports <https://example.com/kjerne> .
+
+# -----------------------------------------------------------------------------
+# Fysisk person
+# -----------------------------------------------------------------------------
+
+kjerne-sh:FysiskPerson
+    a sh:NodeShape ;
+    sh:targetClass person:Person ;
+    sh:name "fysisk person"@nb , "fysisk person"@nn , "natural person"@en ;
+    skos:editorialNote "KILDE: Domene_utdanning_-_Egenskaper_per_klasse.xlsx (arket Person). EKSTERNT: egenskapene er verifisert mot Core Person 2.1.2."@nb ;
+    sh:property
+        [ sh:path foaf:name ;
+          sh:name "fullt navn"@nb , "fullt namn"@nn , "full name"@en ;
+          sh:description "Det fullstendige navnet til personen som én tekststreng."@nb ,
+                         "Det fullstendige namnet til personen som éin tekststreng."@nn ,
+                         "The complete name of the Person as one string."@en ] ,
+        [ sh:path foaf:givenName ;
+          sh:name "fornavn"@nb , "førenamn"@nn , "given name"@en ;
+          sh:description "Navnet eller navnene som identifiserer personen innenfor en familie med felles etternavn."@nb ,
+                         "Namnet eller namna som identifiserer personen innanfor ein familie med felles etternamn."@nn ,
+                         "The name(s) that identify the Person within a family with a common surname."@en ] ,
+        [ sh:path dcterms:alternative ;
+          sh:name "mellomnavn"@nb , "mellomnamn"@nn , "middle name"@en ;
+          sh:description "Ethvert navn personen er kjent under, bortsett fra det fulle navnet."@nb ,
+                         "Kva som helst namn personen er kjend under, bortsett frå det fulle namnet."@nn ,
+                         "Any name by which a Person is known, other than their full name."@en ;
+          skos:editorialNote "Åpen beslutning: Excel-skjemaet kobler mellomnavn til dct:alternative (alternativt navn), men det er et annet begrep. Alternativ: egen egenskap for mellomnavn."@nb ] ,
+        [ sh:path foaf:familyName ;
+          sh:name "etternavn"@nb , "etternamn"@nn , "family name"@en ;
+          sh:description "Det arvelige etternavnet til en familie."@nb ,
+                         "Det arvelege etternamnet til ein familie."@nn ,
+                         "The hereditary surname of a family."@en ] ,
+        [ sh:path dcterms:identifier ;
+          sh:class adms:Identifier ;
+          sh:name "identifikasjonsnummer"@nb , "identifikasjonsnummer"@nn , "identifier"@en ;
+          sh:description "Den entydige, strukturerte referansen til personen."@nb ,
+                         "Den eintydige, strukturerte referansen til personen."@nn ,
+                         "The unambiguous structured reference to the Person."@en ;
+          skos:editorialNote "EKSTERNT: Core Person 2.1.2 bruker dct:identifier med verdi av klassen adms:Identifier, ikke en tekstverdi. Det gir plass til type, utsteder, utstedelsesdato og tidligere identifikatorer."@nb ] ,
+        [ sh:path cv:sex ;
+          sh:class skos:Concept ;
+          sh:nodeKind sh:IRI ;
+          skos:editorialNote "Beslutning 33: Verdien skal være et begrep (IRI) fra en kontrollert kodeliste. Hvilken kodeliste, bestemmes i profiler."@nb ;
+          sh:name "biologisk kjønn"@nb , "biologisk kjønn"@nn , "sex"@en ;
+          sh:description "Organismens biologiske kjønn."@nb ,
+                         "Det biologiske kjønnet til organismen."@nn ,
+                         "The organism's biological sex."@en ] ,
+        [ sh:path cv:gender ;
+          sh:class skos:Concept ;
+          sh:nodeKind sh:IRI ;
+          skos:editorialNote "Beslutning 33: Verdien skal være et begrep (IRI) fra en kontrollert kodeliste. Hvilken kodeliste, bestemmes i profiler."@nb ;
+          sh:name "juridisk kjønn"@nb , "juridisk kjønn"@nn , "gender"@en ;
+          sh:description "Personens identiteter, uttrykk og samfunnsroller."@nb ,
+                         "Identitetane, uttrykka og samfunnsrollene til personen."@nn ,
+                         "The identities, expressions and societal roles of the Person."@en ;
+          skos:editorialNote "Åpen beslutning: Excel-skjemaet kaller denne juridisk kjønn, men Core Person-definisjonen handler om identitet og sosiale roller, ikke registrert juridisk kjønn. Alternativer: egen egenskap for juridisk kjønn, eller en annen europeisk egenskap hvis en finnes."@nb ] ,
+        [ sh:path cv:birthDate ;
+          sh:name "fødselsdato"@nb , "fødselsdato"@nn , "date of birth"@en ;
+          sh:description "Tidspunktet da personen ble født."@nb ,
+                         "Tidspunktet då personen vart fødd."@nn ,
+                         "The point in time on which the Person was born."@en ;
+          skos:editorialNote "KILDE: Excel-skjemaet angir formatet date, gYearMonth eller gYear. Formatkrav legges i profiler."@nb ] ,
+        [ sh:path cv:deathDate ;
+          sh:name "dødsdato"@nb , "dødsdato"@nn , "date of death"@en ;
+          sh:description "Tidspunktet da personen døde."@nb ,
+                         "Tidspunktet då personen døydde."@nn ,
+                         "The point in time on which the Person died."@en ] ,
+        [ sh:path person:placeOfBirth ;
+          sh:class dcterms:Location ;
+          sh:name "fødested"@nb , "fødestad"@nn , "place of birth"@en ;
+          sh:description "Stedet der personen ble født."@nb ,
+                         "Staden der personen vart fødd."@nn ,
+                         "The Location where the Person was born."@en ] ,
+        [ sh:path person:placeOfDeath ;
+          sh:class dcterms:Location ;
+          sh:name "dødssted"@nb , "dødsstad"@nn , "place of death"@en ;
+          sh:description "Stedet der personen døde."@nb ,
+                         "Staden der personen døydde."@nn ,
+                         "The Location where the Person died."@en ] ,
+        [ sh:path person:citizenship ;
+          sh:class dcterms:Jurisdiction ;
+          sh:name "statsborgerskap"@nb , "statsborgarskap"@nn , "citizenship"@en ;
+          sh:description "Jurisdiksjonen som har gitt personen statsborgerrettigheter, som stemmerett, rett til vern fra fellesskapet eller utstedelse av pass."@nb ,
+                         "Jurisdiksjonen som har gitt personen statsborgarrettar, som røysterett, rett til vern frå fellesskapen eller utferding av pass."@nn ,
+                         "The Jurisdiction that has conferred citizenship rights on the Person such as the right to vote, to receive certain protection from the community or the issuance of a passport."@en ] ,
+        [ sh:path person:residency ;
+          sh:class dcterms:Jurisdiction ;
+          sh:name "folkeregistrert adresse"@nb , "folkeregistrert adresse"@nn , "residency"@en ;
+          sh:description "Jurisdiksjonen der personen har sin bolig."@nb ,
+                         "Jurisdiksjonen der personen har bustaden sin."@nn ,
+                         "Jurisdiction where the Person has their dwelling."@en ;
+          skos:editorialNote "Åpen beslutning: Excel-skjemaet kaller denne folkeregistrert adresse, men verdien er en jurisdiksjon, ikke en adresse. Henger sammen med hvordan adresse skal modelleres (gul lapp «Egen klasse for adresse»)."@nb ] ,
+        [ sh:path cv:domicile ;
+          sh:class locn:Address ;
+          sh:name "bostedsadresse"@nb , "bustadadresse"@nn , "domicile"@en ;
+          sh:description "Stedet personen regner som sitt faste hjem."@nb ,
+                         "Staden personen reknar som den faste heimen sin."@nn ,
+                         "The place that the Person treats as permanent home."@en ] ,
+        [ sh:path cv:contactPoint ;
+          sh:class cv:ContactPoint ;
+          sh:name "kontaktpunkt"@nb , "kontaktpunkt"@nn , "contact point"@en ;
+          sh:description "Den viktigste kontaktinformasjonen for ressursen."@nb ,
+                         "Den viktigaste kontaktinformasjonen for ressursen."@nn ,
+                         "The main contact information of the resource."@en ] ,
+        [ sh:path kjerne:sivilstand ;
+          sh:class skos:Concept ;
+          sh:nodeKind sh:IRI ;
+          skos:editorialNote "Beslutning 33: Verdien skal være et begrep (IRI) fra en kontrollert kodeliste. Hvilken kodeliste, bestemmes i profiler."@nb ;
+          sh:name "sivilstand"@nb , "sivilstand"@nn , "marital status"@en ] ,
+        [ sh:path kjerne:opprinneligNavn ;
+          sh:name "opprinnelig navn"@nb , "opphavleg namn"@nn , "original name"@en ] .
+
+# -----------------------------------------------------------------------------
+# Virksomhet
+# -----------------------------------------------------------------------------
+
+kjerne-sh:Virksomhet
+    a sh:NodeShape ;
+    sh:targetClass org:Organization ;
+    sh:name "virksomhet"@nb , "verksemd"@nn , "organisation"@en ;
+    skos:editorialNote "FORSLAG (beslutning 32): Organisasjonsnummer og navn gjelder også underenheter og står derfor her i tillegg til på juridisk enhet. Hvor organisasjonsform og næringskode skal stå, er et åpent spørsmål."@nb ;
+    sh:property
+        [ sh:path org:identifier ;
+          sh:name "organisasjonsnummer"@nb , "organisasjonsnummer"@nn , "identifier"@en ;
+          sh:description "En identifikator for organisasjonen, for eksempel et organisasjonsnummer."@nb ,
+                         "Ein identifikator for organisasjonen, til dømes eit organisasjonsnummer."@nn ,
+                         "Gives an identifier, such as a company registration number, that can be used to uniquely identify the organization."@en ;
+          skos:editorialNote "EKSTERNT: W3C ORG. org:identifier har en tekstverdi; for personer bruker vi dcterms:identifier med adms:Identifier."@nb ,
+                             "Åpen beslutning: Skal organisasjonsnummer for virksomheter følge W3C ORG (org:identifier, tekst) eller samme mønster som for personer (dcterms:identifier med adms:Identifier)?"@nb ] ,
+        [ sh:path skos:prefLabel ;
+          sh:name "navn"@nb , "namn"@nn , "name"@en ;
+          sh:description "Organisasjonens hovednavn."@nb ,
+                         "Hovudnamnet til organisasjonen."@nn ,
+                         "The primary name of the organization."@en ;
+          skos:editorialNote "EKSTERNT: W3C ORG anbefaler skos:prefLabel for organisasjonens navn."@nb ] .
+
+# -----------------------------------------------------------------------------
+# Juridisk enhet
+# -----------------------------------------------------------------------------
+
+kjerne-sh:JuridiskEnhet
+    a sh:NodeShape ;
+    sh:targetClass legal:LegalEntity ;
+    sh:name "juridisk enhet"@nb , "juridisk eining"@nn , "legal entity"@en ;
+    skos:editorialNote "KILDE: Domene_utdanning_-_Egenskaper_per_klasse.xlsx (arket Organisasjon). Står fortsatt på juridisk enhet; plasseringen er et åpent spørsmål (beslutning 32). EKSTERNT: egenskapene er verifisert mot Core Business 2.3.0; legal:companyActivity er rettet fra legal:companyActivty (beslutning 19)."@nb ;
+    sh:property
+        [ sh:path legal:legalIdentifier ;
+          sh:class adms:Identifier ;
+          sh:name "organisasjonsnummer"@nb , "organisasjonsnummer"@nn , "legal identifier"@en ;
+          sh:description "Den entydige, strukturerte referansen som myndigheten som registrerte den juridiske enheten, har tildelt den."@nb ,
+                         "Den eintydige, strukturerte referansen som styresmakta som registrerte den juridiske eininga, har tildelt henne."@nn ,
+                         "The unambiguous structured reference assigned to the Legal Entity by the legal authority that registered it."@en ] ,
+        [ sh:path legal:legalName ;
+          sh:name "navn"@nb , "namn"@nn , "legal name"@en ;
+          sh:description "Navnet den juridiske enheten er rettslig registrert under."@nb ,
+                         "Namnet den juridiske eininga er rettsleg registrert under."@nn ,
+                         "The name under which the Legal Entity is legally registered."@en ] ,
+        [ sh:path legal:companyType ;
+          skos:editorialNote "Åpen beslutning: Skal egenskapen stå på virksomhet (org:Organization), juridisk enhet (legal:LegalEntity) eller begge?"@nb ;
+          sh:class skos:Concept ;
+          sh:nodeKind sh:IRI ;
+          skos:editorialNote "Beslutning 33: Verdien skal være et begrep (IRI) fra en kontrollert kodeliste. Hvilken kodeliste, bestemmes i profiler."@nb ;
+          sh:name "organisasjonsform"@nb , "organisasjonsform"@nn , "legal form type"@en ;
+          sh:description "Klassifiseringen av den juridiske enheten som medlem av en bestemt gruppe i forbindelse med rettslig registrering."@nb ,
+                         "Klassifiseringa av den juridiske eininga som medlem av ei bestemd gruppe i samband med rettsleg registrering."@nn ,
+                         "The classification of the Legal Entity as a member of a particular group in the context of legal registration."@en ] ,
+        [ sh:path legal:companyActivity ;
+          skos:editorialNote "Åpen beslutning: Skal egenskapen stå på virksomhet (org:Organization), juridisk enhet (legal:LegalEntity) eller begge?"@nb ;
+          sh:class skos:Concept ;
+          sh:nodeKind sh:IRI ;
+          skos:editorialNote "Beslutning 33: Verdien skal være et begrep (IRI) fra en kontrollert kodeliste. Hvilken kodeliste, bestemmes i profiler."@nb ;
+          sh:name "næringskode"@nb , "næringskode"@nn , "legal entity activity"@en ;
+          sh:description "Arbeidsområdet den juridiske enheten driver innenfor."@nb ,
+                         "Arbeidsområdet den juridiske eininga driv innanfor."@nn ,
+                         "The area of work in which the Legal Entity is engaged."@en ] .
+
+# -----------------------------------------------------------------------------
+# Rolle
+# -----------------------------------------------------------------------------
+
+kjerne-sh:Rolle
+    a sh:NodeShape ;
+    sh:targetClass kjerne:Rolle ;
+    sh:name "rolle"@nb , "rolle"@nn , "role"@en ;
+    sh:property
+        [ sh:path kjerne:erRolleFor ;
+          sh:class foaf:Agent ;
+          skos:editorialNote "Beslutning 39: Kravet fungerer når kjernen lastes inn ved validering, fordi kjernen sier at person:Person og org:Organization er underklasser av foaf:Agent."@nb ;
+          sh:name "er rolle for"@nb , "er rolle for"@nn , "is role of"@en ] ,
+        [ sh:path dcterms:temporal ;
+          sh:class dcterms:PeriodOfTime ;
+          sh:name "periode"@nb , "periode"@nn , "period"@en ;
+          sh:description "Perioden rollen gjelder for."@nb ,
+                         "Perioden rolla gjeld for."@nn ,
+                         "The period for which the role applies."@en ;
+          skos:editorialNote "FORSLAG: Gjenbruk av dcterms:temporal for rollens periode (beslutning 18: roller har perioder)."@nb ] .
+
+# -----------------------------------------------------------------------------
+# Foresatt
+# -----------------------------------------------------------------------------
+
+kjerne-sh:Foresatt
+    a sh:NodeShape ;
+    sh:targetClass kjerne:Foresatt ;
+    sh:name "foresatt"@nb , "føresett"@nn , "guardian"@en ;
+    skos:editorialNote "Beslutning 34. Perioden arves fra formen for rolle."@nb ;
+    sh:property
+        [ sh:path kjerne:erRolleFor ;
+          sh:class person:Person ;
+          sh:name "er rolle for"@nb , "er rolle for"@nn , "is role of"@en ] ,
+        [ sh:path kjerne:erForesattFor ;
+          sh:class person:Person ;
+          sh:name "er foresatt for"@nb , "er føresett for"@nn , "is guardian of"@en ] .

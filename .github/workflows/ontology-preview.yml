@@ -1,0 +1,174 @@
+name: Bygg og publiser TTL- og LinkML-modellene
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened, closed]
+  push:
+    branches: [main]
+    paths:
+      - '**/*.ttl'
+      - '**/*.yaml'
+      - 'linkml/**/*.yml'
+      - 'scripts/linkml-mkdocs.yml'
+      - 'preview/**'
+      - 'scripts/ontology-explorer-assets.txt'
+      - .github/workflows/ontology-preview.yml
+      - .github/workflows/actions.lock
+
+permissions:
+  contents: write
+  pages: write
+  pull-requests: write
+
+concurrency:
+  group: ontology-preview-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    env:
+      EXPLORER_IMAGE: ghcr.io/matdata-eu/ontology-explorer@sha256:658388bc15286e18b97106c1cf5df5d6fa009784a272a34bf758650a38bf55a9
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+      PAGES_DIR: ${{ github.event_name == 'pull_request' && format('pr-preview/pr-{0}', github.event.number) || '' }}
+    steps:
+      - name: Hent modellene
+        uses: actions/checkout@v4.4.0
+        with:
+          persist-credentials: false
+
+      - name: Generer dokumentasjon og OWL fra LinkML
+        if: github.event.action != 'closed'
+        run: |
+          python3 -m venv "$RUNNER_TEMP/linkml-venv"
+          source "$RUNNER_TEMP/linkml-venv/bin/activate"
+          python -m pip install linkml==1.9.5 linkml-runtime==1.9.5 mkdocs==1.6.1 mkdocs-material==9.6.22
+          export LINKML_DOCS_DIR="$RUNNER_TEMP/linkml-docs"
+          mkdir -p "$LINKML_DOCS_DIR"
+          index="$LINKML_DOCS_DIR/index.md"
+          printf '# LinkML-modeller\n\n| Dokumentasjon | OWL | Visning |\n| --- | --- | --- |\n' > "$index"
+          shopt -s globstar nullglob
+          schemas=(linkml/**/*.{yaml,yml})
+          if (( ${#schemas[@]} == 0 )); then
+            echo 'Fant ingen LinkML-skjemaer under linkml/.' >&2
+            exit 1
+          fi
+          for schema in "${schemas[@]}"; do
+            module=${schema#linkml/}
+            module=${module%.*}
+            if [[ -e "$LINKML_DOCS_DIR/$module.ttl" ]]; then
+              echo "Flere skjemaer har samme publiseringssti: $module" >&2
+              exit 1
+            fi
+            gen-doc --render-imports --subfolder-type-separation -d "$LINKML_DOCS_DIR/$module" "$schema"
+            linkml generate owl "$schema" > "$LINKML_DOCS_DIR/$module.ttl"
+            printf '| [%s](<%s/index.md>) | [Turtle](<%s.ttl>) | [Ontology Explorer](<../viewer/?src=../linkml/%s.ttl>) |\n' \
+              "$module" "$module" "$module" "$module" >> "$index"
+          done
+          mkdocs build --strict -f scripts/linkml-mkdocs.yml -d "$PWD/preview/linkml"
+
+      - name: Valider TTL-filene og bygg modellen
+        if: github.event.action != 'closed'
+        run: |
+          docker pull "$EXPLORER_IMAGE"
+          explorer() {
+            docker run --rm --user "$(id -u):$(id -g)" \
+              -v "$PWD:/data:ro" -v "$PWD/preview:/site" "$EXPLORER_IMAGE" "$@"
+          }
+
+          shopt -s globstar nullglob
+          valid_files=(./preview/linkml/**/*.ttl)
+          errors="$RUNNER_TEMP/ttl-errors.md"
+          while IFS= read -r -d '' file; do
+            if explorer stats -- "./$file" > /dev/null 2> "$RUNNER_TEMP/parser-error"; then
+              valid_files+=("./$file")
+            else
+              status=$?
+              if (( status != 1 )); then
+                cat "$RUNNER_TEMP/parser-error" >&2
+                exit "$status"
+              fi
+              { printf '%s\n' "$file"; cat "$RUNNER_TEMP/parser-error"; } | sed 's/^/    /' >> "$errors"
+              echo >> "$errors"
+            fi
+          done < <(git ls-files -z -- '*.ttl')
+
+          if (( ${#valid_files[@]} == 0 )); then
+            echo 'Ingen gyldige TTL-filer å publisere.' > "$RUNNER_TEMP/deploy-report.md"
+            exit 1
+          fi
+          explorer build --title 'Informasjonsmodeller' -o /site/model.json -- "${valid_files[@]}"
+
+      - name: Klargjør Ontology Explorer
+        if: github.event.action != 'closed'
+        run: |
+          shared_module="https://samt-x.github.io/information-models/viewer/assets/ontology-explorer.js"
+          mkdir -p preview/viewer/assets
+          if [[ "$GITHUB_EVENT_NAME" == pull_request ]] && curl --fail --silent --head "$shared_module" > /dev/null; then
+            printf 'import "%s";\n' "$shared_module" > preview/viewer/assets/ontology-explorer.js
+          else
+            container=$(docker run --rm -d --read-only -p 127.0.0.1::8080 "$EXPLORER_IMAGE")
+            trap 'docker stop "$container" > /dev/null' EXIT
+            server="http://$(docker port "$container" 8080/tcp)"
+            while read -r asset; do
+              curl --fail --silent --show-error --retry 5 --retry-all-errors \
+                "$server/assets/$asset" -o "preview/viewer/assets/$asset"
+            done < scripts/ontology-explorer-assets.txt
+            mv preview/viewer/assets/index-*.js preview/viewer/assets/ontology-explorer.js
+            docker cp "$container:/usr/share/doc/ontology-explorer/." preview/viewer/
+          fi
+
+      - name: Klargjør tom mappe for å fjerne en lukket PR
+        if: github.event.action == 'closed'
+        run: mkdir -p empty-preview
+
+      - name: Oppdater gh-pages
+        if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
+        uses: JamesIves/github-pages-deploy-action@v4.9.0
+        with:
+          branch: gh-pages
+          folder: ${{ github.event.action == 'closed' && 'empty-preview' || 'preview' }}
+          target-folder: ${{ env.PAGES_DIR }}
+          clean-exclude: /pr-preview/
+          force: false
+
+      - name: Start publisering på GitHub Pages
+        if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Push med GITHUB_TOKEN utløser ikke automatisk et Pages-bygg.
+          gh api --method POST "repos/$GITHUB_REPOSITORY/pages/builds" --silent
+
+      - name: Lag lenker til modellene
+        if: github.event_name == 'push' || (github.event.action != 'closed' && github.event.pull_request.head.repo.full_name == github.repository)
+        run: |
+          base_url="https://samt-x.github.io/information-models${PAGES_DIR:+/$PAGES_DIR}"
+          echo "GitHub Pages bygger [Ontology Explorer]($base_url/) og [LinkML-dokumentasjonen]($base_url/linkml/)." > "$RUNNER_TEMP/deploy-report.md"
+
+      - name: Rapporter resultatet
+        if: ${{ !cancelled() }}
+        run: |
+          report="$RUNNER_TEMP/deploy-report.md"
+          if [[ -s "$RUNNER_TEMP/ttl-errors.md" ]]; then
+            {
+              echo
+              echo 'Disse TTL-filene ble utelatt:'
+              echo
+              cat "$RUNNER_TEMP/ttl-errors.md"
+            } >> "$report"
+          fi
+          if [[ -s "$report" ]]; then
+            cat "$report" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Kommenter i PR-en
+        if: ${{ !cancelled() && github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          report="$RUNNER_TEMP/deploy-report.md"
+          if [[ -s "$report" ]]; then
+            gh pr comment "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --body-file "$report"
+          fi

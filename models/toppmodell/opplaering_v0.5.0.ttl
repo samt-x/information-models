@@ -1,0 +1,244 @@
+@prefix opplaering: <https://example.com/opplaering/> .
+@prefix kjerne:     <https://example.com/kjerne/> .
+@prefix org:        <http://www.w3.org/ns/org#> .
+@prefix elm:        <http://data.europa.eu/snb/model/elm/> .
+@prefix schema:     <http://schema.org/> .
+@prefix dcterms:    <http://purl.org/dc/terms/> .
+@prefix owl:        <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs:       <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos:       <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd:        <http://www.w3.org/2001/XMLSchema#> .
+
+# =============================================================================
+# Domenemodul for opplæring (v0.5.0)
+# Bygger på de hvite boksene og de heltrukne relasjonene i grønt område i
+# utsnitt_av_modell.png. Røde bokser (Omsorgsrolle) og relasjoner til/fra dem
+# er utelatt. Stiplede relasjoner og gule lapper er åpne spørsmål.
+# Klassenavn følger Miro-skissen.
+# Filen er ordnet i én seksjon per klasse, med relasjonene som går ut fra
+# klassen merket med schema:domainIncludes (ikke-bindende, beslutning 26).
+# Ingen rdfs:domain/range; bindende koblinger ligger i opplaering-shapes.ttl.
+# =============================================================================
+
+<https://example.com/opplaering>
+    a owl:Ontology ;
+    dcterms:title "Domenemodul for opplæring"@nb ,
+                  "Domenemodul for opplæring"@nn ,
+                  "Domain module for education"@en ;
+    dcterms:description "Klasser og relasjoner for opplæringsområdet i oppvekstsektoren."@nb ,
+                        "Klassar og relasjonar for opplæringsområdet i oppvekstsektoren."@nn ,
+                        "Classes and relations for education in the childhood and youth sector."@en ;
+    owl:versionInfo "0.5.0" ;
+    dcterms:issued "2026-11-24"^^xsd:date ;
+    dcterms:publisher <https://organization-catalogue.fellesdatakatalog.digdir.no/organizations/991825827> ;
+    dcterms:license <http://publications.europa.eu/resource/authority/licence/CC_BY_4_0> ;
+    owl:imports <https://example.com/kjerne> ;
+    skos:editorialNote "FORSLAG: Digdir er midlertidig eier. Mulig fremtidig eier: Utdanningsdirektoratet (Udir), som forvalter Grep og de nasjonale skole- og barnehageregistrene. Eierskap avklares i forvaltningen."@nb ,
+                       "FORSLAG: Alle definisjoner i denne modulen er Claudes forslag; kildene har ingen definisjoner for disse klassene."@nb ,
+                       "Paraplymønster (beslutning 31): Generelle klasser her er egne klasser med skos:closeMatch mot europeiske klasser. Spesifikke subklasser i underdomenene får rdfs:subClassOf både til paraplyklassen her og til den europeiske klassen der betydningen passer. Modulen importerer derfor ikke ELM."@nb .
+
+# =============================================================================
+# Ansatt (rolle)
+# =============================================================================
+
+opplaering:Ansatt
+    a owl:Class ;
+    rdfs:subClassOf kjerne:Rolle , org:Membership ;
+    rdfs:isDefinedBy <https://example.com/opplaering> ;
+    skos:prefLabel "ansatt"@nb , "tilsett"@nn , "employee"@en ;
+    skos:definition "Rolle som en fysisk person har i kraft av et ansettelsesforhold."@nb ,
+                    "Rolle som ein fysisk person har i kraft av eit tilsetjingsforhold."@nn ,
+                    "Role that a natural person holds by virtue of an employment relationship."@en ;
+    skos:editorialNote "KILDE: utsnitt_av_modell.png (Ansatt, «er rolle for» Fysisk person) og beslutning 18."@nb ,
+                       "KILDE: Relasjonen fra Ansatt til Oppvekstvirksomhet i skissen (gul lapp «Hva kaller vi dette?») heter foreløpig «arbeidsgiver» og uttrykkes med org:organization (beslutning 35)."@nb ,
+                       "EKSTERNT: Subklasse av org:Membership (W3C ORG), fordi et ansettelsesforhold er et medlemskap i en organisasjon. Beslutning 35."@nb ,
+                       "Åpen beslutning: Skal relasjonen peke på arbeidsgiver eller arbeidssted? For en lærer i en kommunal skole er arbeidsgiver kommunen (juridisk enhet), mens arbeidsstedet er skolen (oppvekstvirksomhet). Skissen peker på oppvekstvirksomhet. Trengs begge?"@nb .
+
+# --- Relasjoner fra ansatt ----------------------------------------------------
+
+opplaering:utfører
+    a owl:ObjectProperty ;
+    schema:domainIncludes opplaering:Ansatt ;
+    rdfs:isDefinedBy <https://example.com/opplaering> ;
+    skos:prefLabel "utfører"@nb , "utfører"@nn , "performs"@en ;
+    skos:definition "Angir et pedagogisk tilbud som en ansatt gjennomfører."@nb ,
+                    "Angir eit pedagogisk tilbod som ein tilsett gjennomfører."@nn ,
+                    "Indicates an educational offering that an employee carries out."@en ;
+    skos:editorialNote "KILDE: utsnitt_av_modell.png (Ansatt utfører Pedagogisk tilbud)."@nb .
+
+# =============================================================================
+# Deltaker (rolle)
+# =============================================================================
+
+opplaering:Deltaker
+    a owl:Class ;
+    rdfs:subClassOf kjerne:Rolle ;
+    rdfs:isDefinedBy <https://example.com/opplaering> ;
+    skos:prefLabel "deltaker"@nb , "deltakar"@nn , "participant"@en ;
+    skos:closeMatch elm:LearningActivity ;
+    skos:definition "Rolle som en fysisk person har når den deltar i et pedagogisk tilbud."@nb ,
+                    "Rolle som ein fysisk person har når han eller ho deltek i eit pedagogisk tilbod."@nn ,
+                    "Role that a natural person holds when participating in an educational offering."@en ;
+    skos:editorialNote "KILDE: utsnitt_av_modell.png (Deltaker, «er rolle for» Fysisk person) og beslutning 18. Relasjonen til Omsorgsrolle (rød boks) er utelatt."@nb ,
+                       "FORSLAG (beslutning 29): En plass, for eksempel en skoleplass, uttrykkes som at personen er deltaker i et pedagogisk tilbud i en periode, ikke som et eget tilbud."@nb ,
+                       "EKSTERNT: closeMatch mot elm:LearningActivity (ELM 3.2.0), definert som «enhver handling, pågående eller fullført, som kan føre til tilegnelse av kunnskap, ferdigheter eller ansvar og selvstendighet». I ELM er den en påstand (Claim) om en person, mens Deltaker er en rolle; derfor closeMatch og ikke subklasse. Beslutning 37."@nb .
+
+# --- Relasjoner fra deltaker --------------------------------------------------
+
+opplaering:påmeldt
+    a owl:ObjectProperty ;
+    schema:domainIncludes opplaering:Deltaker ;
+    rdfs:isDefinedBy <https://example.com/opplaering> ;
+    skos:prefLabel "påmeldt"@nb , "påmeld"@nn , "enrolled in"@en ;
+    skos:definition "Angir et pedagogisk tilbud som en deltaker er meldt på."@nb ,
+                    "Angir eit pedagogisk tilbod som ein deltakar er meld på."@nn ,
+                    "Indicates an educational offering in which a participant is enrolled."@en ;
+    skos:editorialNote "KILDE: utsnitt_av_modell.png (Deltaker påmeldt Pedagogisk tilbud)."@nb .
+
+opplaering:oppnår
+    a owl:ObjectProperty ;
+    schema:domainIncludes opplaering:Deltaker ;
+    rdfs:isDefinedBy <https://example.com/opplaering> ;
+    skos:prefLabel "oppnår"@nb , "oppnår"@nn , "achieves"@en ;
+    skos:definition "Angir et resultat som en deltaker har oppnådd."@nb ,
+                    "Angir eit resultat som ein deltakar har oppnådd."@nn ,
+                    "Indicates a result that a participant has achieved."@en ;
+    skos:editorialNote "KILDE: utsnitt_av_modell.png (Deltaker oppnår Resultat)."@nb .
+
+# =============================================================================
+# Pedagogisk tilbud
+# =============================================================================
+
+opplaering:PedagogiskTilbud
+    a owl:Class ;
+    rdfs:isDefinedBy <https://example.com/opplaering> ;
+    skos:prefLabel "pedagogisk tilbud"@nb , "pedagogisk tilbod"@nn , "educational offering"@en ;
+    skos:definition "Konkret tilbud om opplæring eller annen pedagogisk aktivitet som en oppvekstvirksomhet gir på et bestemt sted i en bestemt periode."@nb ,
+                    "Konkret tilbod om opplæring eller anna pedagogisk aktivitet som ei oppvekstverksemd gir på ein bestemd stad i ein bestemd periode."@nn ,
+                    "Concrete offer of education or other pedagogical activity that an organisation in the childhood and youth sector provides at a specific place for a specific period."@en ;
+    skos:scopeNote "Paraplyklasse. Underdomenene legger til subklasser for egne tilbud, for eksempel fagtilbud, kurs eller SFO-tilbud. Det generelle (fag, læreplan, utdanningsprogram) er ikke et tilbud og hentes fra Grep."@nb ,
+                   "Paraplyklasse. Underdomena legg til subklassar for eigne tilbod, til dømes fagtilbod, kurs eller SFO-tilbod. Det generelle (fag, læreplan, utdanningsprogram) er ikkje eit tilbod og vert henta frå Grep."@nn ;
+    skos:closeMatch elm:LearningOpportunity ;
+    dcterms:source <https://europa.eu/europass/elm-browser/documentation/3-2-0/rdf/ontology/documentation/index-en.html> ;
+    skos:editorialNote "KILDE: utsnitt_av_modell.png (Pedagogisk tilbud). Excel-skjemaet kaller klassen Opplæringstilbud; Miro-navnet er valgt etter avklaring. Beslutning 29."@nb ,
+                       "EKSTERNT: closeMatch, ikke subClassOf, mot elm:LearningOpportunity (ELM 3.2.0), fordi ELM forutsetter læringsutbytte og paraplyen skal kunne romme tilbud der det ikke passer. Subklasser som fag og kurs kan være subklasser av elm:LearningOpportunity."@nb ,
+                       "Åpen beslutning: Hører barnehagetilbud inn under pedagogisk tilbud? Avgjøres senere."@nb ,
+                       "Åpen beslutning: Hvilken egenskap skal koble tilbudet til fag, læreplan eller utdanningsprogram i Grep? Ikke vurdert ennå."@nb .
+
+# --- Relasjoner fra pedagogisk tilbud -----------------------------------------
+
+opplaering:tilbysAv
+    a owl:ObjectProperty ;
+    schema:domainIncludes opplaering:PedagogiskTilbud ;
+    rdfs:isDefinedBy <https://example.com/opplaering> ;
+    skos:prefLabel "tilbys av"@nb , "vert tilbode av"@nn , "is offered by"@en ;
+    skos:definition "Angir virksomheten som gir et pedagogisk tilbud."@nb ,
+                    "Angir verksemda som gir eit pedagogisk tilbod."@nn ,
+                    "Indicates the organisation that provides an educational offering."@en ;
+    skos:editorialNote "KILDE: utsnitt_av_modell.png (Pedagogisk tilbud tilbysAv Oppvekstvirksomhet)."@nb ,
+                       "Åpen beslutning (utsatt): skal egenskapen ha skos:closeMatch mot elm:providedBy (som krever juridisk person), og skal begge retningene (tilbyr/tilbysAv) beholdes?"@nb .
+
+# =============================================================================
+# Resultat
+# =============================================================================
+
+opplaering:Resultat
+    a owl:Class ;
+    rdfs:isDefinedBy <https://example.com/opplaering> ;
+    skos:prefLabel "resultat"@nb , "resultat"@nn , "result"@en ;
+    skos:definition "Det en deltaker oppnår gjennom et pedagogisk tilbud."@nb ,
+                    "Det ein deltakar oppnår gjennom eit pedagogisk tilbod."@nn ,
+                    "What a participant achieves through an educational offering."@en ;
+    skos:scopeNote "Paraplyklasse. Underdomenene legger til subklasser, for eksempel karakter (vurdering), oppnådd kompetanse eller rettighet som studiekompetanse. Hver subklasse kobles til én av ELMs Claim-klasser."@nb ,
+                   "Paraplyklasse. Underdomena legg til subklassar, til dømes karakter (vurdering), oppnådd kompetanse eller rett som studiekompetanse. Kvar subklasse vert kopla til éin av Claim-klassane i ELM."@nn ;
+    skos:closeMatch elm:Claim ;
+    dcterms:source <https://europa.eu/europass/elm-browser/documentation/3-2-0/rdf/ontology/documentation/index-en.html> ;
+    skos:editorialNote "KILDE: utsnitt_av_modell.png (Resultat). Beslutning 30 (alternativ A)."@nb ,
+                       "EKSTERNT: ELMs subklasser av elm:Claim (LearningAchievement, LearningAssessment, LearningEntitlement, LearningActivity) er gjensidig utelukkende. En subklasse av Resultat kan derfor bare kobles til én av dem."@nb ,
+                       "Revurderes før produksjon: Resultat kan muligens være subklasse av elm:Claim i stedet for closeMatch, men det krever at modulen importerer ELM."@nb ,
+                       "Åpen beslutning fra gul lapp i skissen: «Resultat har et grunnlag». Alternativ B (egen klasse for vurdering som grunnlag) holdes åpent; jf. elm:used."@nb ,
+                       "Neste steg: vurder NUS for utdanningsnivå."@nb .
+
+# --- Relasjoner fra resultat --------------------------------------------------
+
+opplaering:dokumenteresGjennom
+    a owl:ObjectProperty ;
+    schema:domainIncludes opplaering:Resultat ;
+    rdfs:isDefinedBy <https://example.com/opplaering> ;
+    skos:prefLabel "dokumenteres gjennom"@nb , "vert dokumentert gjennom"@nn , "is documented through"@en ;
+    skos:definition "Angir dokumentasjon som viser et resultat."@nb ,
+                    "Angir dokumentasjon som viser eit resultat."@nn ,
+                    "Indicates documentation that shows a result."@en ;
+    skos:editorialNote "KILDE: utsnitt_av_modell.png (Resultat dokumenteres gjennom Dokumentasjon)."@nb .
+
+opplaering:gjelder
+    a owl:ObjectProperty ;
+    schema:domainIncludes opplaering:Resultat , opplaering:Dokumentasjon ;
+    rdfs:isDefinedBy <https://example.com/opplaering> ;
+    skos:prefLabel "gjelder"@nb , "gjeld"@nn , "concerns"@en ;
+    skos:definition "Angir hvem eller hva noe handler om."@nb ,
+                    "Angir kven eller kva noko handlar om."@nn ,
+                    "Indicates whom or what something is about."@en ;
+    skos:editorialNote "KILDE: utsnitt_av_modell.png (Dokumentasjon gjelder Deltaker; Resultat gjelder Pedagogisk tilbud)."@nb ,
+                       "FORSLAG: Én generell egenskap for begge forekomstene i skissen; hvilke klasser den kobler, står i formene."@nb .
+
+# =============================================================================
+# Dokumentasjon
+# =============================================================================
+
+opplaering:Dokumentasjon
+    a owl:Class ;
+    rdfs:isDefinedBy <https://example.com/opplaering> ;
+    skos:prefLabel "dokumentasjon"@nb , "dokumentasjon"@nn , "documentation"@en ;
+    skos:definition "Dokument eller registrering som viser et resultat for en deltaker."@nb ,
+                    "Dokument eller registrering som viser eit resultat for ein deltakar."@nn ,
+                    "Document or record that shows a result for a participant."@en ;
+    skos:editorialNote "KILDE: utsnitt_av_modell.png (Dokumentasjon). Gul lapp ved boksen kan ikke leses sikkert."@nb ,
+                       "Beslutning 36: Kobles ikke til ELM på dette nivået, fordi dokumentasjon omfatter mer enn ELMs digitale, verifiserbare legitimasjon (elm:EuropeanDigitalCredential), for eksempel papirvitnemål. Koblingen vurderes i underdomenene, der for eksempel digitale vitnemål kan være subklasse av elm:EuropeanDigitalCredential."@nb .
+
+# Merk: opplaering:gjelder brukes også fra Dokumentasjon (til Deltaker).
+
+# =============================================================================
+# Oppvekstvirksomhet
+# =============================================================================
+
+opplaering:Oppvekstvirksomhet
+    a owl:Class ;
+    rdfs:subClassOf org:Organization ;
+    rdfs:isDefinedBy <https://example.com/opplaering> ;
+    skos:prefLabel "oppvekstvirksomhet"@nb , "oppvekstverksemd"@nn , "childhood and youth organisation"@en ;
+    skos:definition "Virksomhet som tilbyr pedagogiske tilbud til barn, unge eller voksne."@nb ,
+                    "Verksemd som tilbyr pedagogiske tilbod til born, unge eller vaksne."@nn ,
+                    "Organisation that provides educational offerings to children, young people or adults."@en ;
+    skos:editorialNote "KILDE: utsnitt_av_modell.png (Oppvekstvirksomhet). To gule lapper ved boksen kan ikke leses helt sikkert; de ser ut til å spørre hva boksen omfatter og nevne «pedagogisk virksomhet»."@nb ,
+                       "KILDE: Bekreftet av brukeren 2026-11-24: Oppvekstvirksomhet er subklasse av Virksomhet, som er org:Organization (beslutning 32). Excel-arket Utdanningsaktør er tomt og ikke modellert."@nb ,
+                       "KILDE: Blå lapp i utsnitt_av_modell.png (lest opp av brukeren): I kommuner finnes ofte en viktig inndeling i fag (etater eller tilsvarende) mellom virksomhet og oppvekstvirksomhet / støtte- og hjelpevirksomhet. Inndelingen er ikke med i skissen. Åpen beslutning (utsatt): org:OrganizationalUnit er kandidat."@nb ,
+                       "Neste steg: vurder kobling til NSR, NBR og de andre nasjonale registrene."@nb .
+
+# --- Relasjoner fra oppvekstvirksomhet ----------------------------------------
+
+opplaering:tilbyr
+    a owl:ObjectProperty ;
+    schema:domainIncludes opplaering:Oppvekstvirksomhet ;
+    owl:inverseOf opplaering:tilbysAv ;
+    rdfs:isDefinedBy <https://example.com/opplaering> ;
+    skos:prefLabel "tilbyr"@nb , "tilbyr"@nn , "offers"@en ;
+    skos:definition "Angir et pedagogisk tilbud som en virksomhet gir."@nb ,
+                    "Angir eit pedagogisk tilbod som ei verksemd gir."@nn ,
+                    "Indicates an educational offering that an organisation provides."@en ;
+    skos:editorialNote "KILDE: utsnitt_av_modell.png (Oppvekstvirksomhet tilbyr Pedagogisk tilbud)."@nb ,
+                       "Åpen beslutning (utsatt): skal begge retningene (tilbyr/tilbysAv) beholdes?"@nb .
+
+# =============================================================================
+# Støtte- og hjelpevirksomhet
+# =============================================================================
+
+opplaering:StøtteOgHjelpevirksomhet
+    a owl:Class ;
+    rdfs:isDefinedBy <https://example.com/opplaering> ;
+    skos:prefLabel "støtte- og hjelpevirksomhet"@nb , "støtte- og hjelpeverksemd"@nn , "support organisation"@en ;
+    skos:definition "Virksomhet som gir støtte til oppvekstvirksomheter eller deltakere uten selv å tilby pedagogiske tilbud."@nb ,
+                    "Verksemd som gir støtte til oppvekstverksemder eller deltakarar utan sjølv å tilby pedagogiske tilbod."@nn ,
+                    "Organisation that supports childhood and youth organisations or participants without itself providing educational offerings."@en ;
+    skos:example "PP-tjenesten"@nb , "PP-tenesta"@nn ;
+    skos:editorialNote "KILDE: utsnitt_av_modell.png (Støtte- og hjelpevirksomhet). Begge relasjonene (til Oppvekstvirksomhet og subClassOf mot Virksomhet) er stiplede og ikke modellert."@nb .

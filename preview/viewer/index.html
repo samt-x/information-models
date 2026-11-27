@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="nb">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ontology Explorer</title>
+    <style>
+      html, body, ontology-explorer { display: block; height: 100%; margin: 0; }
+    </style>
+    <script type="module" src="./assets/ontology-explorer.js"></script>
+  </head>
+  <body>
+    <ontology-explorer routing></ontology-explorer>
+    <script>
+      const viewer = document.querySelector("ontology-explorer");
+      const params = new URLSearchParams(location.search);
+      viewer.setAttribute("src", params.get("src") || "../model.json");
+      viewer.setAttribute("lang", params.get("lang") || "nb");
+    </script>
+    <noscript>Aktiver JavaScript for å åpne Ontology Explorer.</noscript>
+  </body>
+</html>
