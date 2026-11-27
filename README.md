@@ -8,7 +8,7 @@
 Disse modellene er skrevet i LinkML-format og OWL-modeller og dokumentasjon blir generert med GitHub Actions automatisk ved endringer.
 
 - [Kjerne](linkml/kjerne.yaml)
-- [Opplæring](linkml/opplaering.yaml)
+- [Opplæring](linkml/opplaring.yaml)
 
 ## Utforsk dokumentasjon og OWL-modeller
 
