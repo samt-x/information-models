@@ -1,0 +1,203 @@
+@prefix kjerne:  <https://example.com/kjerne/> .
+@prefix person:  <http://www.w3.org/ns/person#> .
+@prefix legal:   <http://www.w3.org/ns/legal#> .
+@prefix foaf:    <http://xmlns.com/foaf/0.1/> .
+@prefix org:     <http://www.w3.org/ns/org#> .
+@prefix schema:  <http://schema.org/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+# =============================================================================
+# Kjernemodul – felles klasser og egenskaper for aktører (v0.5.0)
+#
+# Filen er ordnet i én seksjon per klasse. Hver seksjon har
+#   1) klassen – enten egen klasse, eller norske etiketter og definisjoner
+#      (tro oversettelser) på en direkte gjenbrukt klasse (beslutning 9, 25)
+#   2) egne egenskaper som brukes på klassen, merket med schema:domainIncludes
+#      (ikke-bindende; gir ingen slutninger, beslutning 26).
+# Gjenbrukte egenskaper (foaf:name, cv:birthDate osv.) og deres norske navn
+# står i kjerne-shapes.ttl (beslutning 22).
+# Navnerommet https://example.com er midlertidig (beslutning 16).
+# =============================================================================
+
+<https://example.com/kjerne>
+    a owl:Ontology ;
+    dcterms:title "Kjernemodul for aktører"@nb ,
+                  "Kjernemodul for aktørar"@nn ,
+                  "Core module for agents"@en ;
+    dcterms:description "Felles klasser og egenskaper for aktører i offentlig sektor. Erstatter Felles informasjonsmodell for Person og Enhet."@nb ,
+                        "Felles klassar og eigenskapar for aktørar i offentleg sektor. Erstattar Felles informasjonsmodell for Person og Enhet."@nn ,
+                        "Shared classes and properties for agents in the Norwegian public sector. Replaces the common information model for Person and Entity."@en ;
+    owl:versionInfo "0.5.0" ;
+    dcterms:issued "2026-11-24"^^xsd:date ;
+    dcterms:publisher <https://organization-catalogue.fellesdatakatalog.digdir.no/organizations/991825827> ;
+    dcterms:license <http://publications.europa.eu/resource/authority/licence/CC_BY_4_0> ;
+    owl:imports <http://www.w3.org/ns/person> ;
+    skos:editorialNote "Digdir er midlertidig eier (dcterms:publisher), bekreftet av brukeren 2026-11-24. FORSLAG: Mulige fremtidige eiere er Skatteetaten (Folkeregisteret) for personbegrepene og Brønnøysundregistrene (Enhetsregisteret) for virksomhetsbegrepene, dersom modulen deles. Eierskap kan flyttes uten at IRI-er endres."@nb ,
+                       "FORSLAG: CC BY 4.0 som lisens."@nb ,
+                       "FORSLAG: Core Business (legal:), FOAF og W3C ORG importeres ikke formelt i v0.1 fordi ontologi-IRI-ene deres ikke er verifisert. Gjenbrukte termer er verifisert mot Core Person 2.1.2 og Core Business 2.3.0."@nb ,
+                       "Norske etiketter på gjenbrukte klasser er tro oversettelser. Ingen norske oversettelser av SEMIC Core Vocabularies ble funnet hos Digdir (søk 2026-11-24); bytt til offisielle oversettelser hvis de kommer."@nb .
+
+# =============================================================================
+# Aktør (direkte gjenbruk: foaf:Agent)
+# =============================================================================
+
+foaf:Agent
+    rdfs:label "aktør"@nb , "aktør"@nn ;
+    skos:definition "Entitet som kan utføre handlinger."@nb ,
+                    "Entitet som kan utføre handlingar."@nn ;
+    skos:scopeNote "I norsk forvaltning har aktør vært brukt om «person eller enhet vi samhandler med» (Felles informasjonsmodell for Person og Enhet)."@nb ,
+                   "I norsk forvaltning har aktør vore brukt om «person eller eining vi samhandlar med» (Felles informasjonsmodell for Person og Enhet)."@nn ;
+    dcterms:source <https://semiceu.github.io/Core-Person-Vocabulary/releases/2.1.2/> ;
+    skos:editorialNote "KILDE: utsnitt_av_modell.png (boksen Aktør). EKSTERNT: foaf:Agent slik den brukes i Core Person 2.1.2; definisjonen er oversatt derfra."@nb ,
+                       "FORSLAG: Direkte gjenbruk av foaf:Agent, fordi Core Vocabularies bruker den som felles superklasse for person og organisasjon. Skissens subClassOf fra Fysisk person og Virksomhet til Aktør er gjentatt i kjernen (beslutning 39); kildene sier det samme (person:Person ⊑ foaf:Person ⊑ foaf:Agent, og org:Organization ⊑ foaf:Agent i W3C ORG). legal:LegalEntity er ikke koblet, fordi det ikke er verifisert at Core Business sier det samme."@nb ,
+                       "Gjenbruksvalget skal revurderes før første produksjonsbruk."@nb .
+
+# =============================================================================
+# Fysisk person (direkte gjenbruk: person:Person)
+# =============================================================================
+
+person:Person
+    rdfs:subClassOf foaf:Agent ;
+    rdfs:label "fysisk person"@nb , "fysisk person"@nn ;
+    skos:definition "Et enkeltmenneske som kan være levende eller død, men ikke oppdiktet."@nb ,
+                    "Eit enkeltmenneske som kan vere levande eller død, men ikkje oppdikta."@nn ;
+    dcterms:source <https://semiceu.github.io/Core-Person-Vocabulary/releases/2.1.2/> ;
+    skos:editorialNote "KILDE: utsnitt_av_modell.png (Fysisk person) og Domene_utdanning_-_Egenskaper_per_klasse.xlsx (Person → person:Person; IRI rettet fra person:person, beslutning 19). EKSTERNT: Core Person 2.1.2."@nb ,
+                       "Beslutning 39: rdfs:subClassOf foaf:Agent gjentar det kildevokabularene allerede sier, slik at kjernen er nok til å validere at en person er en aktør. Endrer ikke klassens betydning."@nb ,
+                       "Gjenbruksvalget skal revurderes før første produksjonsbruk."@nb .
+
+# --- Egne egenskaper for fysisk person ---------------------------------------
+
+kjerne:sivilstand
+    a owl:ObjectProperty ;
+    schema:domainIncludes person:Person ;
+    rdfs:isDefinedBy <https://example.com/kjerne> ;
+    skos:prefLabel "sivilstand"@nb , "sivilstand"@nn , "marital status"@en ;
+    skos:definition "Personens stilling i forhold til ekteskap eller partnerskap."@nb ,
+                    "Stillinga til personen i høve til ekteskap eller partnarskap."@nn ,
+                    "The person's status in relation to marriage or partnership."@en ;
+    dcterms:source <https://www.digdir.no/informasjonsforvaltning/felles-informasjonsmodell-person-og-enhet/2018> ;
+    skos:editorialNote "KILDE: Person_og_Enhet___felles_informasjonsmodell___Digdir_20-10-2026_pdf.pdf (4.11, definisjon på bokmål). Domene_utdanning_-_Egenskaper_per_klasse.xlsx: ikke del av europeisk modell."@nb ,
+                       "FORSLAG: nn- og en-definisjonene er Claudes oversettelser."@nb ,
+                       "Beslutning 33: Verdien skal være et begrep fra en kontrollert kodeliste; hvilken kodeliste, bestemmes i profiler."@nb .
+
+kjerne:opprinneligNavn
+    a owl:DatatypeProperty ;
+    schema:domainIncludes person:Person ;
+    rdfs:isDefinedBy <https://example.com/kjerne> ;
+    skos:prefLabel "opprinnelig navn"@nb , "opphavleg namn"@nn , "original name"@en ;
+    skos:definition "Navn før navneendring av ulike årsaker, for eksempel pikenavn."@nb ,
+                    "Namn før namneendring av ulike årsaker, til dømes jentenamn."@nn ,
+                    "Name before a change of name for various reasons, for example maiden name."@en ;
+    skos:closeMatch person:birthName ;
+    dcterms:source <https://www.digdir.no/informasjonsforvaltning/felles-informasjonsmodell-person-og-enhet/2018> ;
+    skos:editorialNote "KILDE: Person_og_Enhet___felles_informasjonsmodell___Digdir_20-10-2026_pdf.pdf (4.12, definisjon på bokmål). Domene_utdanning_-_Egenskaper_per_klasse.xlsx: ikke del av europeisk modell."@nb ,
+                       "EKSTERNT: Core Person 2.1.2 har person:birthName (fullt navn ved fødsel). Opprinnelig navn er bredere (navn før en hvilken som helst navneendring), derfor closeMatch."@nb ,
+                       "FORSLAG: nn- og en-definisjonene er Claudes oversettelser."@nb .
+
+# =============================================================================
+# Virksomhet (direkte gjenbruk: org:Organization)
+# =============================================================================
+
+org:Organization
+    rdfs:subClassOf foaf:Agent ;
+    rdfs:label "organisasjon"@nb , "organisasjon"@nn ;
+    skos:altLabel "virksomhet"@nb , "verksemd"@nn ;
+    skos:definition "En samling mennesker organisert i et fellesskap eller en annen sosial, kommersiell eller politisk struktur. Gruppen har et felles formål eller en grunn til å eksistere som går ut over de enkelte medlemmene, og den kan opptre som en aktør."@nb ,
+                    "Ei samling menneske organisert i eit fellesskap eller ein annan sosial, kommersiell eller politisk struktur. Gruppa har eit felles føremål eller ein grunn til å eksistere som går ut over dei einskilde medlemene, og ho kan opptre som ein aktør."@nn ;
+    skos:scopeNote "Brukes om virksomheter i Brønnøysundregistrenes betydning: aktør som har et formål og opptrer som en enhet. Omfatter både juridiske enheter og underenheter, for eksempel en kommunal skole."@nb ,
+                   "Vert brukt om verksemder i tydinga til Brønnøysundregistra: aktør som har eit føremål og opptrer som ei eining. Omfattar både juridiske einingar og undereiningar, til dømes ein kommunal skule."@nn ;
+    dcterms:source <https://www.w3.org/TR/vocab-org/> ;
+    dcterms:subject <https://data.norge.no/concepts/db4682a1-6b4f-374e-9834-bd13b3295294> ;
+    skos:editorialNote "KILDE: utsnitt_av_modell.png (Virksomhet) og Domene_utdanning_-_Egenskaper_per_klasse.xlsx (arket Organisasjon, definisjonen av Organization). Brønnøysundregistrenes definisjon av virksomhet er oppgitt av brukeren 2026-11-24. EKSTERNT: W3C ORG; definisjonen er oversatt derfra. Beslutning 32."@nb ,
+                       "Valgt fremfor legal:LegalEntity fordi Brreg-definisjonen ikke krever juridisk person, og Oppvekstvirksomhet omfatter kommunale skoler som er underenheter."@nb ,
+                       "Avvik: org:Organization er «en samling mennesker», mens Brregs «aktør» trolig også omfatter enkeltpersonforetak."@nb ,
+                       "Vurder alternativ B: egen klasse kjerne:Virksomhet med Brregs definisjon, koblet med skos:closeMatch org:Organization og skos:narrowMatch legal:LegalEntity, og med dcterms:subject til begrepet i Felles begrepskatalog. Gir uendret norsk definisjon fra autoritativ kilde, men én egen klasse mer å forvalte."@nb ,
+                       "Åpen beslutning: Hvordan skal relasjonen mellom en virksomhet og den juridiske enheten som eier eller driver den, modelleres? Eksempel: en kommunal skole (virksomhet) og kommunen (juridisk enhet). Ikke vurdert ennå."@nb ,
+                       "Beslutning 39: rdfs:subClassOf foaf:Agent gjentar det kildevokabularene allerede sier, slik at kjernen er nok til å validere at en virksomhet er en aktør. Endrer ikke klassens betydning."@nb ,
+                       "Gjenbruksvalget skal revurderes før første produksjonsbruk."@nb .
+
+# =============================================================================
+# Juridisk enhet (direkte gjenbruk: legal:LegalEntity)
+# =============================================================================
+
+legal:LegalEntity
+    rdfs:label "juridisk enhet"@nb , "juridisk eining"@nn ;
+    skos:definition "En selvstendig næringsdrivende, et selskap eller en organisasjon som har juridiske rettigheter og plikter."@nb ,
+                    "Ein sjølvstendig næringsdrivande, eit selskap eller ein organisasjon som har juridiske rettar og plikter."@nn ;
+    skos:scopeNote "Brukes om juridiske enheter som eier eller driver virksomheter, for eksempel kommune, fylkeskommune, aksjeselskap eller stiftelse. Samme enhet kan også være en virksomhet (org:Organization)."@nb ,
+                   "Vert brukt om juridiske einingar som eig eller driv verksemder, til dømes kommune, fylkeskommune, aksjeselskap eller stifting. Same eining kan òg vere ei verksemd (org:Organization)."@nn ;
+    dcterms:source <https://semiceu.github.io/Core-Business-Vocabulary/releases/2.3.0/> ;
+    skos:editorialNote "KILDE: Domene_utdanning_-_Egenskaper_per_klasse.xlsx (Legal Entity → legal:LegalEntity; IRI rettet fra legal:legalEntity, beslutning 19). EKSTERNT: Core Business 2.3.0. Rolle avklart i beslutning 32."@nb ,
+                       "Avvik: definisjonen omfatter selvstendig næringsdrivende, men et enkeltpersonforetak er ikke eget rettssubjekt i norsk rett. Klassen er derfor litt bredere enn «juridisk person», og etiketten er «juridisk enhet». En egen subklasse kjerne:JuridiskPerson kan legges til hvis det blir behov for å skille ut enkeltpersonforetak."@nb ,
+                       "Gjenbruksvalget skal revurderes før første produksjonsbruk."@nb .
+
+# Ingen egne egenskaper for virksomhet eller juridisk enhet i v0.3.0;
+# gjenbrukte egenskaper står i kjerne-shapes.
+
+# =============================================================================
+# Rolle (egen klasse)
+# =============================================================================
+
+kjerne:Rolle
+    a owl:Class ;
+    rdfs:isDefinedBy <https://example.com/kjerne> ;
+    skos:prefLabel "rolle"@nb , "rolle"@nn , "role"@en ;
+    skos:definition "Funksjon som en aktør har i en bestemt sammenheng i en avgrenset periode."@nb ,
+                    "Funksjon som ein aktør har i ein bestemd samanheng i ein avgrensa periode."@nn ,
+                    "Function that an agent holds in a particular context for a limited period."@en ;
+    skos:closeMatch org:Membership ;
+    dcterms:source <https://www.w3.org/TR/vocab-org/> ;
+    skos:editorialNote "KILDE: utsnitt_av_modell.png (boksen Rolle, blått område) og beslutning 18 (roller som egen ressurs)."@nb ,
+                       "FORSLAG: Definisjonen er Claudes forslag. Egen klasse fordi org:Membership krever en organisasjon som motpart, mens en deltakerrolle gjelder et pedagogisk tilbud. Derfor closeMatch, ikke subClassOf."@nb ,
+                       "Konflikt: Domene_utdanning_-_Egenskaper_per_klasse.xlsx peker på org:Role. I W3C ORG er org:Role en rolletype (f.eks. «rektor»), ikke en rolle en bestemt person har. org:Role kan brukes senere som kodeliste for rolletyper."@nb ,
+                       "Gjenbruksvalget skal revurderes før første produksjonsbruk."@nb .
+
+# --- Egne egenskaper for rolle -----------------------------------------------
+
+kjerne:erRolleFor
+    a owl:ObjectProperty ;
+    schema:domainIncludes kjerne:Rolle ;
+    rdfs:isDefinedBy <https://example.com/kjerne> ;
+    skos:prefLabel "er rolle for"@nb , "er rolle for"@nn , "is role of"@en ;
+    skos:definition "Angir aktøren som har rollen."@nb ,
+                    "Angir aktøren som har rolla."@nn ,
+                    "Indicates the agent that holds the role."@en ;
+    skos:editorialNote "KILDE: utsnitt_av_modell.png (relasjonen «er rolle for» fra Ansatt og Deltaker til Fysisk person)."@nb ,
+                       "Åpen beslutning (gul lapp i skissen): Hva skal relasjonen hete, «er rolle for» eller «innehas av»?"@nb ,
+                       "FORSLAG: Definisjonen er Claudes forslag."@nb .
+
+# =============================================================================
+# Foresatt (egen klasse, subklasse av Rolle)
+# =============================================================================
+
+kjerne:Foresatt
+    a owl:Class ;
+    rdfs:subClassOf kjerne:Rolle ;
+    rdfs:isDefinedBy <https://example.com/kjerne> ;
+    skos:prefLabel "foresatt"@nb , "føresett"@nn , "guardian"@en ;
+    skos:definition "Rolle som en fysisk person har når den har ansvar for et barn."@nb ,
+                    "Rolle som ein fysisk person har når han eller ho har ansvar for eit barn."@nn ,
+                    "Role that a natural person holds when responsible for a child."@en ;
+    skos:scopeNote "Personen som er foresatt, angis med «er rolle for», og barnet med «er foresatt for». Perioden personen var foresatt for barnet, angis med dcterms:temporal."@nb ,
+                   "Personen som er føresett, vert gitt med «er rolle for», og barnet med «er føresett for». Perioden personen var føresett for barnet, vert gitt med dcterms:temporal."@nn ;
+    skos:editorialNote "KILDE: utsnitt_av_modell.png (stiplet relasjon «er foresatt for» mellom fysiske personer). Beslutning 34: modelleres som rolle i kjernen fordi rollen har egne opplysninger, som perioden."@nb ,
+                       "FORSLAG: Definisjonen er Claudes forslag."@nb ,
+                       "Åpen beslutning: Hva skal rollen hete? «Foresatt» er brukt foreløpig."@nb ,
+                       "Åpen beslutning: Hvordan skal verge, biologisk forelder, forelder med foreldreansvar og lignende modelleres sammen med denne rollen? Alternativer: egne subklasser av Foresatt, en rolletype fra en kodeliste, eller egne roller ved siden av Foresatt. Henger sammen med den røde boksen Omsorgsrolle i skissen og den gule lappen «Hva med verge?»."@nb .
+
+# --- Egne egenskaper for foresatt --------------------------------------------
+
+kjerne:erForesattFor
+    a owl:ObjectProperty ;
+    schema:domainIncludes kjerne:Foresatt ;
+    rdfs:isDefinedBy <https://example.com/kjerne> ;
+    skos:prefLabel "er foresatt for"@nb , "er føresett for"@nn , "is guardian of"@en ;
+    skos:definition "Angir barnet som rollen gjelder."@nb ,
+                    "Angir barnet som rolla gjeld."@nn ,
+                    "Indicates the child to whom the role applies."@en ;
+    skos:editorialNote "KILDE: utsnitt_av_modell.png (relasjonen «er foresatt for»). Beslutning 34. FORSLAG: Definisjonen er Claudes forslag."@nb .

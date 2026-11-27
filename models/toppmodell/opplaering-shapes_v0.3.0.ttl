@@ -1,0 +1,76 @@
+@prefix opplaering:    <https://example.com/opplaering/> .
+@prefix opplaering-sh: <https://example.com/opplaering/shapes/> .
+@prefix kjerne:        <https://example.com/kjerne/> .
+@prefix person:        <http://www.w3.org/ns/person#> .
+@prefix org:           <http://www.w3.org/ns/org#> .
+@prefix dcterms:       <http://purl.org/dc/terms/> .
+@prefix owl:           <http://www.w3.org/2002/07/owl#> .
+@prefix sh:            <http://www.w3.org/ns/shacl#> .
+@prefix skos:          <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd:           <http://www.w3.org/2001/XMLSchema#> .
+
+# =============================================================================
+# Strukturformer for opplæringsmodulen (v0.3.0)
+# Viser hvilke klasser relasjonene i skissen kobler (beslutning 8).
+# Ingen kardinaliteter (beslutning 12).
+# =============================================================================
+
+<https://example.com/opplaering/shapes>
+    a owl:Ontology ;
+    dcterms:title "Strukturformer for opplæringsmodulen"@nb ,
+                  "Strukturformer for opplæringsmodulen"@nn ,
+                  "Structural shapes for the education module"@en ;
+    owl:versionInfo "0.3.0" ;
+    dcterms:issued "2026-11-24"^^xsd:date ;
+    dcterms:publisher <https://organization-catalogue.fellesdatakatalog.digdir.no/organizations/991825827> ;
+    dcterms:license <http://publications.europa.eu/resource/authority/licence/CC_BY_4_0> ;
+    owl:imports <https://example.com/opplaering> , <https://example.com/kjerne/shapes> ;
+    skos:editorialNote "KILDE: alle koblinger er hentet fra heltrukne relasjoner i utsnitt_av_modell.png."@nb .
+
+opplaering-sh:Ansatt
+    a sh:NodeShape ;
+    sh:targetClass opplaering:Ansatt ;
+    sh:property
+        [ sh:path kjerne:erRolleFor ; sh:class person:Person ] ,
+        [ sh:path opplaering:utfører ; sh:class opplaering:PedagogiskTilbud ] ,
+        [ sh:path org:organization ;
+          sh:class org:Organization ;
+          sh:name "arbeidsgiver"@nb , "arbeidsgjevar"@nn , "employer"@en ;
+          sh:description "Organisasjonen den ansatte er ansatt i."@nb ,
+                         "Organisasjonen den tilsette er tilsett i."@nn ,
+                         "The organisation in which the employee is employed."@en ;
+          skos:editorialNote "KILDE: Relasjonen fra Ansatt til Oppvekstvirksomhet i skissen. EKSTERNT: org:organization (W3C ORG). Beslutning 35."@nb ,
+                             "Åpen beslutning: Skal relasjonen peke på arbeidsgiver (ofte kommunen, en juridisk enhet) eller arbeidssted (skolen, en oppvekstvirksomhet)? Verdien er derfor foreløpig bare krevd å være en org:Organization."@nb ] .
+
+opplaering-sh:Deltaker
+    a sh:NodeShape ;
+    sh:targetClass opplaering:Deltaker ;
+    sh:property
+        [ sh:path kjerne:erRolleFor ; sh:class person:Person ] ,
+        [ sh:path opplaering:påmeldt ; sh:class opplaering:PedagogiskTilbud ] ,
+        [ sh:path opplaering:oppnår ; sh:class opplaering:Resultat ] .
+
+opplaering-sh:PedagogiskTilbud
+    a sh:NodeShape ;
+    sh:targetClass opplaering:PedagogiskTilbud ;
+    sh:property
+        [ sh:path opplaering:tilbysAv ; sh:class opplaering:Oppvekstvirksomhet ] .
+
+opplaering-sh:Resultat
+    a sh:NodeShape ;
+    sh:targetClass opplaering:Resultat ;
+    sh:property
+        [ sh:path opplaering:dokumenteresGjennom ; sh:class opplaering:Dokumentasjon ] ,
+        [ sh:path opplaering:gjelder ; sh:class opplaering:PedagogiskTilbud ] .
+
+opplaering-sh:Dokumentasjon
+    a sh:NodeShape ;
+    sh:targetClass opplaering:Dokumentasjon ;
+    sh:property
+        [ sh:path opplaering:gjelder ; sh:class opplaering:Deltaker ] .
+
+opplaering-sh:Oppvekstvirksomhet
+    a sh:NodeShape ;
+    sh:targetClass opplaering:Oppvekstvirksomhet ;
+    sh:property
+        [ sh:path opplaering:tilbyr ; sh:class opplaering:PedagogiskTilbud ] .
