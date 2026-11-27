@@ -1,0 +1,568 @@
+@prefix adms: <http://www.w3.org/ns/adms#> .
+@prefix cv: <http://data.europa.eu/m8g/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix kjerne: <https://modell.samt-bu.no/kjerne/> .
+@prefix legal: <http://www.w3.org/ns/legal#> .
+@prefix linkml: <https://w3id.org/linkml/> .
+@prefix locn: <http://www.w3.org/ns/locn#> .
+@prefix org: <http://www.w3.org/ns/org#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix pav: <http://purl.org/pav/> .
+@prefix person: <http://www.w3.org/ns/person#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://modell.samt-bu.no/kjerne.owl.ttl> a owl:Ontology ;
+    rdfs:label "kjerne" ;
+    dcterms:license "http://publications.europa.eu/resource/authority/licence/CC_BY_4_0" ;
+    dcterms:title "Kjernemodul for aktører" ;
+    pav:version "0.5.0" ;
+    skos:definition "Felles klasser og egenskaper for aktører i offentlig sektor. Erstatter Felles informasjonsmodell for Person og Enhet." ;
+    kjerne:description_en "Shared classes and properties for agents in the Norwegian public sector. Replaces the common information model for Person and Entity." ;
+    kjerne:description_nn "Felles klassar og eigenskapar for aktørar i offentleg sektor. Erstattar Felles informasjonsmodell for Person og Enhet." ;
+    kjerne:title_en "Core module for agents" ;
+    kjerne:title_nn "Kjernemodul for aktørar" .
+
+kjerne:JuridiskEnhet a owl:Class ;
+    rdfs:label "JuridiskEnhet" ;
+    dcterms:title "juridisk enhet" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:allValuesFrom kjerne:Any ;
+            owl:onProperty kjerne:juridiskNavn ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty kjerne:juridiskIdentifikator ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom kjerne:Identifikator ;
+            owl:onProperty kjerne:juridiskIdentifikator ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty kjerne:organisasjonsform ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom kjerne:Begrep ;
+            owl:onProperty kjerne:naringskode ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty kjerne:juridiskNavn ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty kjerne:naringskode ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom kjerne:Begrep ;
+            owl:onProperty kjerne:organisasjonsform ] ;
+    skos:definition "En selvstendig næringsdrivende, et selskap eller en organisasjon som har juridiske rettigheter og plikter." ;
+    skos:exactMatch legal:LegalEntity ;
+    skos:inScheme <https://modell.samt-bu.no/kjerne> ;
+    kjerne:description_nn "Ein sjølvstendig næringsdrivande, eit selskap eller ein organisasjon som har juridiske rettar og plikter." ;
+    kjerne:title_nn "juridisk eining" .
+
+kjerne:Virksomhet a owl:Class ;
+    rdfs:label "Virksomhet" ;
+    dcterms:title "organisasjon" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:allValuesFrom kjerne:Any ;
+            owl:onProperty kjerne:organisasjonsnummer ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom kjerne:Any ;
+            owl:onProperty kjerne:navn ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty kjerne:organisasjonsnummer ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty kjerne:navn ],
+        kjerne:Aktor ;
+    skos:altLabel "virksomhet" ;
+    skos:definition "En samling mennesker organisert i et fellesskap eller en annen sosial, kommersiell eller politisk struktur. Gruppen har et felles formål eller en grunn til å eksistere som går ut over de enkelte medlemmene, og den kan opptre som en aktør." ;
+    skos:exactMatch org:Organization ;
+    skos:inScheme <https://modell.samt-bu.no/kjerne> ;
+    kjerne:description_nn "Ei samling menneske organisert i eit fellesskap eller ein annan sosial, kommersiell eller politisk struktur. Gruppa har eit felles føremål eller ein grunn til å eksistere som går ut over dei einskilde medlemene, og ho kan opptre som ein aktør." ;
+    kjerne:title_nn "organisasjon" .
+
+kjerne:Adresse a owl:Class ;
+    rdfs:label "Adresse" ;
+    skos:exactMatch locn:Address ;
+    skos:inScheme <https://modell.samt-bu.no/kjerne> .
+
+kjerne:Foresatt a owl:Class ;
+    rdfs:label "Foresatt" ;
+    dcterms:title "foresatt" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty kjerne:erRolleFor ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty kjerne:erForesattFor ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom kjerne:FysiskPerson ;
+            owl:onProperty kjerne:erForesattFor ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom kjerne:FysiskPerson ;
+            owl:onProperty kjerne:erRolleFor ],
+        kjerne:Rolle ;
+    skos:definition "Rolle som en fysisk person har når den har ansvar for et barn." ;
+    skos:exactMatch kjerne:Foresatt ;
+    skos:inScheme <https://modell.samt-bu.no/kjerne> ;
+    kjerne:description_en "Role that a natural person holds when responsible for a child." ;
+    kjerne:description_nn "Rolle som ein fysisk person har når han eller ho har ansvar for eit barn." ;
+    kjerne:title_en "guardian" ;
+    kjerne:title_nn "føresett" .
+
+kjerne:Kontaktpunkt a owl:Class ;
+    rdfs:label "Kontaktpunkt" ;
+    skos:exactMatch cv:ContactPoint ;
+    skos:inScheme <https://modell.samt-bu.no/kjerne> .
+
+kjerne:Tidsperiode a owl:Class ;
+    rdfs:label "Tidsperiode" ;
+    skos:exactMatch dcterms:PeriodOfTime ;
+    skos:inScheme <https://modell.samt-bu.no/kjerne> .
+
+kjerne:FysiskPerson a owl:Class ;
+    rdfs:label "FysiskPerson" ;
+    dcterms:title "fysisk person" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty kjerne:biologiskKjonn ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom kjerne:Adresse ;
+            owl:onProperty kjerne:bostedsadresse ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom kjerne:Begrep ;
+            owl:onProperty kjerne:juridiskKjonn ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty kjerne:folkeregistrertAdresse ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom kjerne:Jurisdiksjon ;
+            owl:onProperty kjerne:statsborgerskap ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty kjerne:fornavn ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty kjerne:mellomnavn ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom kjerne:Begrep ;
+            owl:onProperty kjerne:sivilstand ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom kjerne:Any ;
+            owl:onProperty kjerne:fulltNavn ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom kjerne:Any ;
+            owl:onProperty kjerne:dodsdato ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom kjerne:Jurisdiksjon ;
+            owl:onProperty kjerne:folkeregistrertAdresse ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty kjerne:sivilstand ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty kjerne:statsborgerskap ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom kjerne:Any ;
+            owl:onProperty kjerne:mellomnavn ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty kjerne:opprinneligNavn ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom kjerne:Any ;
+            owl:onProperty kjerne:etternavn ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty kjerne:dodssted ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom kjerne:Begrep ;
+            owl:onProperty kjerne:biologiskKjonn ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty kjerne:dodsdato ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty kjerne:fodested ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom kjerne:Sted ;
+            owl:onProperty kjerne:fodested ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty kjerne:etternavn ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty kjerne:identifikasjonsnummer ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty kjerne:fulltNavn ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom kjerne:Sted ;
+            owl:onProperty kjerne:dodssted ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom kjerne:Any ;
+            owl:onProperty kjerne:fornavn ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty kjerne:opprinneligNavn ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty kjerne:bostedsadresse ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty kjerne:kontaktpunkt ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom kjerne:Identifikator ;
+            owl:onProperty kjerne:identifikasjonsnummer ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty kjerne:fodselsdato ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom kjerne:Kontaktpunkt ;
+            owl:onProperty kjerne:kontaktpunkt ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty kjerne:juridiskKjonn ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom kjerne:Any ;
+            owl:onProperty kjerne:fodselsdato ],
+        kjerne:Aktor ;
+    skos:definition "Et enkeltmenneske som kan være levende eller død, men ikke oppdiktet." ;
+    skos:exactMatch person:Person ;
+    skos:inScheme <https://modell.samt-bu.no/kjerne> ;
+    kjerne:description_nn "Eit enkeltmenneske som kan vere levande eller død, men ikkje oppdikta." ;
+    kjerne:title_nn "fysisk person" .
+
+kjerne:Identifikator a owl:Class ;
+    rdfs:label "Identifikator" ;
+    skos:exactMatch adms:Identifier ;
+    skos:inScheme <https://modell.samt-bu.no/kjerne> .
+
+kjerne:Jurisdiksjon a owl:Class ;
+    rdfs:label "Jurisdiksjon" ;
+    skos:exactMatch dcterms:Jurisdiction ;
+    skos:inScheme <https://modell.samt-bu.no/kjerne> .
+
+kjerne:Rolle a owl:Class ;
+    rdfs:label "Rolle" ;
+    dcterms:title "rolle" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty kjerne:erRolleFor ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty kjerne:periode ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom kjerne:Tidsperiode ;
+            owl:onProperty kjerne:periode ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom kjerne:Aktor ;
+            owl:onProperty kjerne:erRolleFor ] ;
+    skos:closeMatch org:Membership ;
+    skos:definition "Funksjon som en aktør har i en bestemt sammenheng i en avgrenset periode." ;
+    skos:exactMatch kjerne:Rolle ;
+    skos:inScheme <https://modell.samt-bu.no/kjerne> ;
+    kjerne:description_en "Function that an agent holds in a particular context for a limited period." ;
+    kjerne:description_nn "Funksjon som ein aktør har i ein bestemd samanheng i ein avgrensa periode." ;
+    kjerne:title_en "role" ;
+    kjerne:title_nn "rolle" .
+
+kjerne:Sted a owl:Class ;
+    rdfs:label "Sted" ;
+    skos:exactMatch dcterms:Location ;
+    skos:inScheme <https://modell.samt-bu.no/kjerne> .
+
+kjerne:biologiskKjonn a owl:ObjectProperty ;
+    rdfs:label "biologiskKjonn" ;
+    dcterms:title "biologisk kjønn" ;
+    skos:definition "Organismens biologiske kjønn." ;
+    skos:inScheme <https://modell.samt-bu.no/kjerne> ;
+    kjerne:description_en "The organism's biological sex." ;
+    kjerne:description_nn "Det biologiske kjønnet til organismen." ;
+    kjerne:title_en "sex" ;
+    kjerne:title_nn "biologisk kjønn" .
+
+kjerne:bostedsadresse a owl:ObjectProperty ;
+    rdfs:label "bostedsadresse" ;
+    dcterms:title "bostedsadresse" ;
+    skos:definition "Stedet personen regner som sitt faste hjem." ;
+    skos:inScheme <https://modell.samt-bu.no/kjerne> ;
+    kjerne:description_en "The place that the Person treats as permanent home." ;
+    kjerne:description_nn "Staden personen reknar som den faste heimen sin." ;
+    kjerne:title_en "domicile" ;
+    kjerne:title_nn "bustadadresse" .
+
+kjerne:dodsdato a owl:ObjectProperty ;
+    rdfs:label "dodsdato" ;
+    dcterms:title "dødsdato" ;
+    skos:definition "Tidspunktet da personen døde." ;
+    skos:inScheme <https://modell.samt-bu.no/kjerne> ;
+    kjerne:description_en "The point in time on which the Person died." ;
+    kjerne:description_nn "Tidspunktet då personen døydde." ;
+    kjerne:title_en "date of death" ;
+    kjerne:title_nn "dødsdato" .
+
+kjerne:dodssted a owl:ObjectProperty ;
+    rdfs:label "dodssted" ;
+    dcterms:title "dødssted" ;
+    skos:definition "Stedet der personen døde." ;
+    skos:inScheme <https://modell.samt-bu.no/kjerne> ;
+    kjerne:description_en "The Location where the Person died." ;
+    kjerne:description_nn "Staden der personen døydde." ;
+    kjerne:title_en "place of death" ;
+    kjerne:title_nn "dødsstad" .
+
+kjerne:erForesattFor a owl:ObjectProperty ;
+    rdfs:label "erForesattFor" ;
+    dcterms:title "er foresatt for" ;
+    skos:definition "Angir barnet som rollen gjelder." ;
+    skos:inScheme <https://modell.samt-bu.no/kjerne> ;
+    kjerne:description_en "Indicates the child to whom the role applies." ;
+    kjerne:description_nn "Angir barnet som rolla gjeld." ;
+    kjerne:title_en "is guardian of" ;
+    kjerne:title_nn "er føresett for" .
+
+kjerne:etternavn a owl:ObjectProperty ;
+    rdfs:label "etternavn" ;
+    dcterms:title "etternavn" ;
+    skos:definition "Det arvelige etternavnet til en familie." ;
+    skos:inScheme <https://modell.samt-bu.no/kjerne> ;
+    kjerne:description_en "The hereditary surname of a family." ;
+    kjerne:description_nn "Det arvelege etternamnet til ein familie." ;
+    kjerne:title_en "family name" ;
+    kjerne:title_nn "etternamn" .
+
+kjerne:fodested a owl:ObjectProperty ;
+    rdfs:label "fodested" ;
+    dcterms:title "fødested" ;
+    skos:definition "Stedet der personen ble født." ;
+    skos:inScheme <https://modell.samt-bu.no/kjerne> ;
+    kjerne:description_en "The Location where the Person was born." ;
+    kjerne:description_nn "Staden der personen vart fødd." ;
+    kjerne:title_en "place of birth" ;
+    kjerne:title_nn "fødestad" .
+
+kjerne:fodselsdato a owl:ObjectProperty ;
+    rdfs:label "fodselsdato" ;
+    dcterms:title "fødselsdato" ;
+    skos:definition "Tidspunktet da personen ble født." ;
+    skos:inScheme <https://modell.samt-bu.no/kjerne> ;
+    kjerne:description_en "The point in time on which the Person was born." ;
+    kjerne:description_nn "Tidspunktet då personen vart fødd." ;
+    kjerne:title_en "date of birth" ;
+    kjerne:title_nn "fødselsdato" .
+
+kjerne:folkeregistrertAdresse a owl:ObjectProperty ;
+    rdfs:label "folkeregistrertAdresse" ;
+    dcterms:title "folkeregistrert adresse" ;
+    skos:definition "Jurisdiksjonen der personen har sin bolig." ;
+    skos:inScheme <https://modell.samt-bu.no/kjerne> ;
+    kjerne:description_en "Jurisdiction where the Person has their dwelling." ;
+    kjerne:description_nn "Jurisdiksjonen der personen har bustaden sin." ;
+    kjerne:title_en "residency" ;
+    kjerne:title_nn "folkeregistrert adresse" .
+
+kjerne:fornavn a owl:ObjectProperty ;
+    rdfs:label "fornavn" ;
+    dcterms:title "fornavn" ;
+    skos:definition "Navnet eller navnene som identifiserer personen innenfor en familie med felles etternavn." ;
+    skos:inScheme <https://modell.samt-bu.no/kjerne> ;
+    kjerne:description_en "The name(s) that identify the Person within a family with a common surname." ;
+    kjerne:description_nn "Namnet eller namna som identifiserer personen innanfor ein familie med felles etternamn." ;
+    kjerne:title_en "given name" ;
+    kjerne:title_nn "førenamn" .
+
+kjerne:fulltNavn a owl:ObjectProperty ;
+    rdfs:label "fulltNavn" ;
+    dcterms:title "fullt navn" ;
+    skos:definition "Det fullstendige navnet til personen som én tekststreng." ;
+    skos:inScheme <https://modell.samt-bu.no/kjerne> ;
+    kjerne:description_en "The complete name of the Person as one string." ;
+    kjerne:description_nn "Det fullstendige namnet til personen som éin tekststreng." ;
+    kjerne:title_en "full name" ;
+    kjerne:title_nn "fullt namn" .
+
+kjerne:identifikasjonsnummer a owl:ObjectProperty ;
+    rdfs:label "identifikasjonsnummer" ;
+    dcterms:title "identifikasjonsnummer" ;
+    skos:definition "Den entydige, strukturerte referansen til personen." ;
+    skos:inScheme <https://modell.samt-bu.no/kjerne> ;
+    kjerne:description_en "The unambiguous structured reference to the Person." ;
+    kjerne:description_nn "Den eintydige, strukturerte referansen til personen." ;
+    kjerne:title_en "identifier" ;
+    kjerne:title_nn "identifikasjonsnummer" .
+
+kjerne:juridiskIdentifikator a owl:ObjectProperty ;
+    rdfs:label "juridiskIdentifikator" ;
+    dcterms:title "organisasjonsnummer" ;
+    skos:definition "Den entydige, strukturerte referansen som myndigheten som registrerte den juridiske enheten, har tildelt den." ;
+    skos:inScheme <https://modell.samt-bu.no/kjerne> ;
+    kjerne:description_en "The unambiguous structured reference assigned to the Legal Entity by the legal authority that registered it." ;
+    kjerne:description_nn "Den eintydige, strukturerte referansen som styresmakta som registrerte den juridiske eininga, har tildelt henne." ;
+    kjerne:title_en "legal identifier" ;
+    kjerne:title_nn "organisasjonsnummer" .
+
+kjerne:juridiskKjonn a owl:ObjectProperty ;
+    rdfs:label "juridiskKjonn" ;
+    dcterms:title "juridisk kjønn" ;
+    skos:definition "Personens identiteter, uttrykk og samfunnsroller." ;
+    skos:inScheme <https://modell.samt-bu.no/kjerne> ;
+    kjerne:description_en "The identities, expressions and societal roles of the Person." ;
+    kjerne:description_nn "Identitetane, uttrykka og samfunnsrollene til personen." ;
+    kjerne:title_en "gender" ;
+    kjerne:title_nn "juridisk kjønn" .
+
+kjerne:juridiskNavn a owl:ObjectProperty ;
+    rdfs:label "juridiskNavn" ;
+    dcterms:title "navn" ;
+    skos:definition "Navnet den juridiske enheten er rettslig registrert under." ;
+    skos:inScheme <https://modell.samt-bu.no/kjerne> ;
+    kjerne:description_en "The name under which the Legal Entity is legally registered." ;
+    kjerne:description_nn "Namnet den juridiske eininga er rettsleg registrert under." ;
+    kjerne:title_en "legal name" ;
+    kjerne:title_nn "namn" .
+
+kjerne:kontaktpunkt a owl:ObjectProperty ;
+    rdfs:label "kontaktpunkt" ;
+    dcterms:title "kontaktpunkt" ;
+    skos:definition "Den viktigste kontaktinformasjonen for ressursen." ;
+    skos:inScheme <https://modell.samt-bu.no/kjerne> ;
+    kjerne:description_en "The main contact information of the resource." ;
+    kjerne:description_nn "Den viktigaste kontaktinformasjonen for ressursen." ;
+    kjerne:title_en "contact point" ;
+    kjerne:title_nn "kontaktpunkt" .
+
+kjerne:mellomnavn a owl:ObjectProperty ;
+    rdfs:label "mellomnavn" ;
+    dcterms:title "mellomnavn" ;
+    skos:definition "Ethvert navn personen er kjent under, bortsett fra det fulle navnet." ;
+    skos:inScheme <https://modell.samt-bu.no/kjerne> ;
+    kjerne:description_en "Any name by which a Person is known, other than their full name." ;
+    kjerne:description_nn "Kva som helst namn personen er kjend under, bortsett frå det fulle namnet." ;
+    kjerne:title_en "middle name" ;
+    kjerne:title_nn "mellomnamn" .
+
+kjerne:naringskode a owl:ObjectProperty ;
+    rdfs:label "naringskode" ;
+    dcterms:title "næringskode" ;
+    skos:definition "Arbeidsområdet den juridiske enheten driver innenfor." ;
+    skos:inScheme <https://modell.samt-bu.no/kjerne> ;
+    kjerne:description_en "The area of work in which the Legal Entity is engaged." ;
+    kjerne:description_nn "Arbeidsområdet den juridiske eininga driv innanfor." ;
+    kjerne:title_en "legal entity activity" ;
+    kjerne:title_nn "næringskode" .
+
+kjerne:navn a owl:ObjectProperty ;
+    rdfs:label "navn" ;
+    dcterms:title "navn" ;
+    skos:definition "Organisasjonens hovednavn." ;
+    skos:inScheme <https://modell.samt-bu.no/kjerne> ;
+    kjerne:description_en "The primary name of the organization." ;
+    kjerne:description_nn "Hovudnamnet til organisasjonen." ;
+    kjerne:title_en "name" ;
+    kjerne:title_nn "namn" .
+
+kjerne:opprinneligNavn a owl:DatatypeProperty ;
+    rdfs:label "opprinneligNavn" ;
+    dcterms:title "opprinnelig navn" ;
+    skos:closeMatch person:birthName ;
+    skos:definition "Navn før navneendring av ulike årsaker, for eksempel pikenavn." ;
+    skos:inScheme <https://modell.samt-bu.no/kjerne> ;
+    kjerne:description_en "Name before a change of name for various reasons, for example maiden name." ;
+    kjerne:description_nn "Namn før namneendring av ulike årsaker, til dømes jentenamn." ;
+    kjerne:title_en "original name" ;
+    kjerne:title_nn "opphavleg namn" .
+
+kjerne:organisasjonsform a owl:ObjectProperty ;
+    rdfs:label "organisasjonsform" ;
+    dcterms:title "organisasjonsform" ;
+    skos:definition "Klassifiseringen av den juridiske enheten som medlem av en bestemt gruppe i forbindelse med rettslig registrering." ;
+    skos:inScheme <https://modell.samt-bu.no/kjerne> ;
+    kjerne:description_en "The classification of the Legal Entity as a member of a particular group in the context of legal registration." ;
+    kjerne:description_nn "Klassifiseringa av den juridiske eininga som medlem av ei bestemd gruppe i samband med rettsleg registrering." ;
+    kjerne:title_en "legal form type" ;
+    kjerne:title_nn "organisasjonsform" .
+
+kjerne:organisasjonsnummer a owl:ObjectProperty ;
+    rdfs:label "organisasjonsnummer" ;
+    dcterms:title "organisasjonsnummer" ;
+    skos:definition "En identifikator for organisasjonen, for eksempel et organisasjonsnummer." ;
+    skos:inScheme <https://modell.samt-bu.no/kjerne> ;
+    kjerne:description_en "Gives an identifier, such as a company registration number, that can be used to uniquely identify the organization." ;
+    kjerne:description_nn "Ein identifikator for organisasjonen, til dømes eit organisasjonsnummer." ;
+    kjerne:title_en "identifier" ;
+    kjerne:title_nn "organisasjonsnummer" .
+
+kjerne:periode a owl:ObjectProperty ;
+    rdfs:label "periode" ;
+    dcterms:title "periode" ;
+    skos:definition "Perioden rollen gjelder for." ;
+    skos:inScheme <https://modell.samt-bu.no/kjerne> ;
+    kjerne:description_en "The period for which the role applies." ;
+    kjerne:description_nn "Perioden rolla gjeld for." ;
+    kjerne:title_en "period" ;
+    kjerne:title_nn "periode" .
+
+kjerne:sivilstand a owl:ObjectProperty ;
+    rdfs:label "sivilstand" ;
+    dcterms:title "sivilstand" ;
+    skos:definition "Personens stilling i forhold til ekteskap eller partnerskap." ;
+    skos:inScheme <https://modell.samt-bu.no/kjerne> ;
+    kjerne:description_en "The person's status in relation to marriage or partnership." ;
+    kjerne:description_nn "Stillinga til personen i høve til ekteskap eller partnarskap." ;
+    kjerne:title_en "marital status" ;
+    kjerne:title_nn "sivilstand" .
+
+kjerne:statsborgerskap a owl:ObjectProperty ;
+    rdfs:label "statsborgerskap" ;
+    dcterms:title "statsborgerskap" ;
+    skos:definition "Jurisdiksjonen som har gitt personen statsborgerrettigheter, som stemmerett, rett til vern fra fellesskapet eller utstedelse av pass." ;
+    skos:inScheme <https://modell.samt-bu.no/kjerne> ;
+    kjerne:description_en "The Jurisdiction that has conferred citizenship rights on the Person such as the right to vote, to receive certain protection from the community or the issuance of a passport." ;
+    kjerne:description_nn "Jurisdiksjonen som har gitt personen statsborgarrettar, som røysterett, rett til vern frå fellesskapen eller utferding av pass." ;
+    kjerne:title_en "citizenship" ;
+    kjerne:title_nn "statsborgarskap" .
+
+kjerne:Aktor a owl:Class ;
+    rdfs:label "Aktor" ;
+    dcterms:title "aktør" ;
+    skos:definition "Entitet som kan utføre handlinger." ;
+    skos:exactMatch foaf:Agent ;
+    skos:inScheme <https://modell.samt-bu.no/kjerne> ;
+    kjerne:description_nn "Entitet som kan utføre handlingar." ;
+    kjerne:title_nn "aktør" .
+
+kjerne:iri a owl:DatatypeProperty ;
+    rdfs:label "iri" ;
+    skos:inScheme <https://modell.samt-bu.no/kjerne> .
+
+kjerne:erRolleFor a owl:ObjectProperty ;
+    rdfs:label "erRolleFor" ;
+    dcterms:title "er rolle for" ;
+    skos:definition "Angir aktøren som har rollen." ;
+    skos:inScheme <https://modell.samt-bu.no/kjerne> ;
+    kjerne:description_en "Indicates the agent that holds the role." ;
+    kjerne:description_nn "Angir aktøren som har rolla." ;
+    kjerne:title_en "is role of" ;
+    kjerne:title_nn "er rolle for" .
+
+kjerne:Begrep a owl:Class ;
+    rdfs:label "Begrep" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty kjerne:iri ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty kjerne:iri ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:anyURI ;
+            owl:onProperty kjerne:iri ] ;
+    skos:exactMatch skos:Concept ;
+    skos:inScheme <https://modell.samt-bu.no/kjerne> .
+
+kjerne:Any a owl:Class ;
+    rdfs:label "Any" ;
+    skos:definition "Åpent verdiområde der strukturformen ikke angir klasse eller datatype." ;
+    skos:exactMatch linkml:Any ;
+    skos:inScheme <https://modell.samt-bu.no/kjerne> .
+
+
