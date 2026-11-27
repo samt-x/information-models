@@ -15,9 +15,6 @@
     dcterms:title "juridisk enhet" ;
     rdfs:subClassOf [ a owl:Restriction ;
             owl:minCardinality 0 ;
-            owl:onProperty <https://modell.samt-bu.no/kjerne/juridiskIdentifikator> ],
-        [ a owl:Restriction ;
-            owl:minCardinality 0 ;
             owl:onProperty <https://modell.samt-bu.no/kjerne/juridiskNavn> ],
         [ a owl:Restriction ;
             owl:minCardinality 0 ;
@@ -26,6 +23,12 @@
             owl:allValuesFrom <https://modell.samt-bu.no/kjerne/Any> ;
             owl:onProperty <https://modell.samt-bu.no/kjerne/juridiskNavn> ],
         [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty <https://modell.samt-bu.no/kjerne/organisasjonsform> ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty <https://modell.samt-bu.no/kjerne/juridiskIdentifikator> ],
+        [ a owl:Restriction ;
             owl:allValuesFrom <https://modell.samt-bu.no/kjerne/Identifikator> ;
             owl:onProperty <https://modell.samt-bu.no/kjerne/juridiskIdentifikator> ],
         [ a owl:Restriction ;
@@ -33,10 +36,7 @@
             owl:onProperty <https://modell.samt-bu.no/kjerne/organisasjonsform> ],
         [ a owl:Restriction ;
             owl:allValuesFrom <https://modell.samt-bu.no/kjerne/Begrep> ;
-            owl:onProperty <https://modell.samt-bu.no/kjerne/naringskode> ],
-        [ a owl:Restriction ;
-            owl:minCardinality 0 ;
-            owl:onProperty <https://modell.samt-bu.no/kjerne/organisasjonsform> ] ;
+            owl:onProperty <https://modell.samt-bu.no/kjerne/naringskode> ] ;
     skos:definition "En selvstendig næringsdrivende, et selskap eller en organisasjon som har juridiske rettigheter og plikter." ;
     skos:exactMatch <http://www.w3.org/ns/legal#LegalEntity> ;
     skos:inScheme <https://modell.samt-bu.no/kjerne> ;
@@ -63,7 +63,7 @@
     rdfs:label "Foresatt" ;
     dcterms:title "foresatt" ;
     rdfs:subClassOf [ a owl:Restriction ;
-            owl:minCardinality 0 ;
+            owl:allValuesFrom <https://modell.samt-bu.no/kjerne/FysiskPerson> ;
             owl:onProperty <https://modell.samt-bu.no/kjerne/erRolleFor> ],
         [ a owl:Restriction ;
             owl:minCardinality 0 ;
@@ -72,7 +72,7 @@
             owl:allValuesFrom <https://modell.samt-bu.no/kjerne/FysiskPerson> ;
             owl:onProperty <https://modell.samt-bu.no/kjerne/erForesattFor> ],
         [ a owl:Restriction ;
-            owl:allValuesFrom <https://modell.samt-bu.no/kjerne/FysiskPerson> ;
+            owl:minCardinality 0 ;
             owl:onProperty <https://modell.samt-bu.no/kjerne/erRolleFor> ],
         <https://modell.samt-bu.no/kjerne/Rolle> ;
     skos:definition "Rolle som en fysisk person har når den har ansvar for et barn." ;
@@ -97,9 +97,6 @@ opplaring:Ansatt a owl:Class ;
     rdfs:label "Ansatt" ;
     dcterms:title "ansatt" ;
     rdfs:subClassOf [ a owl:Restriction ;
-            owl:allValuesFrom opplaring:PedagogiskTilbud ;
-            owl:onProperty opplaring:utforer ],
-        [ a owl:Restriction ;
             owl:minCardinality 0 ;
             owl:onProperty opplaring:arbeidsgiver ],
         [ a owl:Restriction ;
@@ -114,6 +111,9 @@ opplaring:Ansatt a owl:Class ;
         [ a owl:Restriction ;
             owl:allValuesFrom <https://modell.samt-bu.no/kjerne/FysiskPerson> ;
             owl:onProperty <https://modell.samt-bu.no/kjerne/erRolleFor> ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom opplaring:PedagogiskTilbud ;
+            owl:onProperty opplaring:utforer ],
         <https://modell.samt-bu.no/kjerne/Rolle>,
         opplaring:Organisasjonsmedlemskap ;
     skos:definition "Rolle som en fysisk person har i kraft av et ansettelsesforhold." ;
@@ -162,11 +162,11 @@ opplaring:StotteOgHjelpevirksomhet a owl:Class ;
             owl:minCardinality 0 ;
             owl:onProperty <https://modell.samt-bu.no/kjerne/navn> ],
         [ a owl:Restriction ;
-            owl:minCardinality 0 ;
-            owl:onProperty <https://modell.samt-bu.no/kjerne/organisasjonsnummer> ],
-        [ a owl:Restriction ;
             owl:allValuesFrom <https://modell.samt-bu.no/kjerne/Any> ;
             owl:onProperty <https://modell.samt-bu.no/kjerne/navn> ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty <https://modell.samt-bu.no/kjerne/organisasjonsnummer> ],
         [ a owl:Restriction ;
             owl:allValuesFrom <https://modell.samt-bu.no/kjerne/Any> ;
             owl:onProperty <https://modell.samt-bu.no/kjerne/organisasjonsnummer> ],
@@ -433,23 +433,23 @@ opplaring:Deltaker a owl:Class ;
     rdfs:label "Deltaker" ;
     dcterms:title "deltaker" ;
     rdfs:subClassOf [ a owl:Restriction ;
-            owl:allValuesFrom <https://modell.samt-bu.no/kjerne/FysiskPerson> ;
+            owl:minCardinality 0 ;
             owl:onProperty <https://modell.samt-bu.no/kjerne/erRolleFor> ],
         [ a owl:Restriction ;
             owl:minCardinality 0 ;
+            owl:onProperty opplaring:pameldt ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom <https://modell.samt-bu.no/kjerne/FysiskPerson> ;
             owl:onProperty <https://modell.samt-bu.no/kjerne/erRolleFor> ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom opplaring:PedagogiskTilbud ;
+            owl:onProperty opplaring:pameldt ],
         [ a owl:Restriction ;
             owl:minCardinality 0 ;
             owl:onProperty opplaring:oppnar ],
         [ a owl:Restriction ;
             owl:allValuesFrom opplaring:Resultat ;
             owl:onProperty opplaring:oppnar ],
-        [ a owl:Restriction ;
-            owl:minCardinality 0 ;
-            owl:onProperty opplaring:pameldt ],
-        [ a owl:Restriction ;
-            owl:allValuesFrom opplaring:PedagogiskTilbud ;
-            owl:onProperty opplaring:pameldt ],
         <https://modell.samt-bu.no/kjerne/Rolle> ;
     skos:closeMatch elm:LearningActivity ;
     skos:definition "Rolle som en fysisk person har når den deltar i et pedagogisk tilbud." ;
@@ -481,10 +481,10 @@ opplaring:Oppvekstvirksomhet a owl:Class ;
     rdfs:label "Oppvekstvirksomhet" ;
     dcterms:title "oppvekstvirksomhet" ;
     rdfs:subClassOf [ a owl:Restriction ;
-            owl:allValuesFrom opplaring:PedagogiskTilbud ;
+            owl:minCardinality 0 ;
             owl:onProperty opplaring:tilbyr ],
         [ a owl:Restriction ;
-            owl:minCardinality 0 ;
+            owl:allValuesFrom opplaring:PedagogiskTilbud ;
             owl:onProperty opplaring:tilbyr ],
         <https://modell.samt-bu.no/kjerne/Virksomhet> ;
     skos:definition "Virksomhet som tilbyr pedagogiske tilbud til barn, unge eller voksne." ;
@@ -499,16 +499,16 @@ opplaring:Resultat a owl:Class ;
     rdfs:label "Resultat" ;
     dcterms:title "resultat" ;
     rdfs:subClassOf [ a owl:Restriction ;
-            owl:allValuesFrom opplaring:Dokumentasjon ;
-            owl:onProperty opplaring:dokumenteresGjennom ],
-        [ a owl:Restriction ;
             owl:minCardinality 0 ;
-            owl:onProperty opplaring:gjelder ],
+            owl:onProperty opplaring:dokumenteresGjennom ],
         [ a owl:Restriction ;
             owl:allValuesFrom opplaring:PedagogiskTilbud ;
             owl:onProperty opplaring:gjelder ],
         [ a owl:Restriction ;
             owl:minCardinality 0 ;
+            owl:onProperty opplaring:gjelder ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom opplaring:Dokumentasjon ;
             owl:onProperty opplaring:dokumenteresGjennom ] ;
     skos:closeMatch elm:Claim ;
     skos:definition "Det en deltaker oppnår gjennom et pedagogisk tilbud." ;
@@ -607,10 +607,37 @@ opplaring:utforer a owl:ObjectProperty ;
     dcterms:title "fysisk person" ;
     rdfs:subClassOf [ a owl:Restriction ;
             owl:minCardinality 0 ;
+            owl:onProperty <https://modell.samt-bu.no/kjerne/fodested> ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom <https://modell.samt-bu.no/kjerne/Begrep> ;
+            owl:onProperty <https://modell.samt-bu.no/kjerne/juridiskKjonn> ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom <https://modell.samt-bu.no/kjerne/Any> ;
             owl:onProperty <https://modell.samt-bu.no/kjerne/etternavn> ],
         [ a owl:Restriction ;
+            owl:allValuesFrom <https://modell.samt-bu.no/kjerne/Identifikator> ;
+            owl:onProperty <https://modell.samt-bu.no/kjerne/identifikasjonsnummer> ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom <https://modell.samt-bu.no/kjerne/Any> ;
+            owl:onProperty <https://modell.samt-bu.no/kjerne/fodselsdato> ],
+        [ a owl:Restriction ;
             owl:minCardinality 0 ;
-            owl:onProperty <https://modell.samt-bu.no/kjerne/juridiskKjonn> ],
+            owl:onProperty <https://modell.samt-bu.no/kjerne/bostedsadresse> ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom <https://modell.samt-bu.no/kjerne/Jurisdiksjon> ;
+            owl:onProperty <https://modell.samt-bu.no/kjerne/statsborgerskap> ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty <https://modell.samt-bu.no/kjerne/dodssted> ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty <https://modell.samt-bu.no/kjerne/fornavn> ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty <https://modell.samt-bu.no/kjerne/sivilstand> ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom <https://modell.samt-bu.no/kjerne/Any> ;
+            owl:onProperty <https://modell.samt-bu.no/kjerne/mellomnavn> ],
         [ a owl:Restriction ;
             owl:allValuesFrom <https://modell.samt-bu.no/kjerne/Sted> ;
             owl:onProperty <https://modell.samt-bu.no/kjerne/fodested> ],
@@ -618,14 +645,14 @@ opplaring:utforer a owl:ObjectProperty ;
             owl:allValuesFrom <https://modell.samt-bu.no/kjerne/Jurisdiksjon> ;
             owl:onProperty <https://modell.samt-bu.no/kjerne/folkeregistrertAdresse> ],
         [ a owl:Restriction ;
-            owl:allValuesFrom <https://modell.samt-bu.no/kjerne/Identifikator> ;
+            owl:allValuesFrom <https://modell.samt-bu.no/kjerne/Any> ;
+            owl:onProperty <https://modell.samt-bu.no/kjerne/fornavn> ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty <https://modell.samt-bu.no/kjerne/juridiskKjonn> ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
             owl:onProperty <https://modell.samt-bu.no/kjerne/identifikasjonsnummer> ],
-        [ a owl:Restriction ;
-            owl:allValuesFrom xsd:string ;
-            owl:onProperty <https://modell.samt-bu.no/kjerne/opprinneligNavn> ],
-        [ a owl:Restriction ;
-            owl:allValuesFrom <https://modell.samt-bu.no/kjerne/Sted> ;
-            owl:onProperty <https://modell.samt-bu.no/kjerne/dodssted> ],
         [ a owl:Restriction ;
             owl:minCardinality 0 ;
             owl:onProperty <https://modell.samt-bu.no/kjerne/kontaktpunkt> ],
@@ -633,80 +660,53 @@ opplaring:utforer a owl:ObjectProperty ;
             owl:allValuesFrom <https://modell.samt-bu.no/kjerne/Begrep> ;
             owl:onProperty <https://modell.samt-bu.no/kjerne/sivilstand> ],
         [ a owl:Restriction ;
-            owl:minCardinality 0 ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty <https://modell.samt-bu.no/kjerne/opprinneligNavn> ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom <https://modell.samt-bu.no/kjerne/Any> ;
             owl:onProperty <https://modell.samt-bu.no/kjerne/fulltNavn> ],
         [ a owl:Restriction ;
             owl:minCardinality 0 ;
-            owl:onProperty <https://modell.samt-bu.no/kjerne/statsborgerskap> ],
-        [ a owl:Restriction ;
-            owl:allValuesFrom <https://modell.samt-bu.no/kjerne/Any> ;
-            owl:onProperty <https://modell.samt-bu.no/kjerne/mellomnavn> ],
+            owl:onProperty <https://modell.samt-bu.no/kjerne/fodselsdato> ],
         [ a owl:Restriction ;
             owl:minCardinality 0 ;
-            owl:onProperty <https://modell.samt-bu.no/kjerne/mellomnavn> ],
-        [ a owl:Restriction ;
-            owl:minCardinality 0 ;
-            owl:onProperty <https://modell.samt-bu.no/kjerne/folkeregistrertAdresse> ],
-        [ a owl:Restriction ;
-            owl:minCardinality 0 ;
-            owl:onProperty <https://modell.samt-bu.no/kjerne/fornavn> ],
-        [ a owl:Restriction ;
-            owl:allValuesFrom <https://modell.samt-bu.no/kjerne/Any> ;
-            owl:onProperty <https://modell.samt-bu.no/kjerne/fornavn> ],
-        [ a owl:Restriction ;
-            owl:allValuesFrom <https://modell.samt-bu.no/kjerne/Any> ;
             owl:onProperty <https://modell.samt-bu.no/kjerne/etternavn> ],
         [ a owl:Restriction ;
             owl:minCardinality 0 ;
-            owl:onProperty <https://modell.samt-bu.no/kjerne/dodssted> ],
-        [ a owl:Restriction ;
-            owl:allValuesFrom <https://modell.samt-bu.no/kjerne/Any> ;
-            owl:onProperty <https://modell.samt-bu.no/kjerne/fodselsdato> ],
+            owl:onProperty <https://modell.samt-bu.no/kjerne/mellomnavn> ],
         [ a owl:Restriction ;
             owl:allValuesFrom <https://modell.samt-bu.no/kjerne/Any> ;
             owl:onProperty <https://modell.samt-bu.no/kjerne/dodsdato> ],
         [ a owl:Restriction ;
             owl:minCardinality 0 ;
-            owl:onProperty <https://modell.samt-bu.no/kjerne/sivilstand> ],
+            owl:onProperty <https://modell.samt-bu.no/kjerne/biologiskKjonn> ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty <https://modell.samt-bu.no/kjerne/statsborgerskap> ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom <https://modell.samt-bu.no/kjerne/Begrep> ;
+            owl:onProperty <https://modell.samt-bu.no/kjerne/biologiskKjonn> ],
         [ a owl:Restriction ;
             owl:allValuesFrom <https://modell.samt-bu.no/kjerne/Kontaktpunkt> ;
             owl:onProperty <https://modell.samt-bu.no/kjerne/kontaktpunkt> ],
         [ a owl:Restriction ;
             owl:minCardinality 0 ;
-            owl:onProperty <https://modell.samt-bu.no/kjerne/fodested> ],
-        [ a owl:Restriction ;
-            owl:allValuesFrom <https://modell.samt-bu.no/kjerne/Any> ;
-            owl:onProperty <https://modell.samt-bu.no/kjerne/fulltNavn> ],
-        [ a owl:Restriction ;
-            owl:minCardinality 0 ;
-            owl:onProperty <https://modell.samt-bu.no/kjerne/fodselsdato> ],
-        [ a owl:Restriction ;
-            owl:minCardinality 0 ;
-            owl:onProperty <https://modell.samt-bu.no/kjerne/biologiskKjonn> ],
-        [ a owl:Restriction ;
-            owl:allValuesFrom <https://modell.samt-bu.no/kjerne/Begrep> ;
-            owl:onProperty <https://modell.samt-bu.no/kjerne/juridiskKjonn> ],
-        [ a owl:Restriction ;
-            owl:allValuesFrom <https://modell.samt-bu.no/kjerne/Begrep> ;
-            owl:onProperty <https://modell.samt-bu.no/kjerne/biologiskKjonn> ],
-        [ a owl:Restriction ;
-            owl:minCardinality 0 ;
-            owl:onProperty <https://modell.samt-bu.no/kjerne/bostedsadresse> ],
+            owl:onProperty <https://modell.samt-bu.no/kjerne/dodsdato> ],
         [ a owl:Restriction ;
             owl:minCardinality 0 ;
             owl:onProperty <https://modell.samt-bu.no/kjerne/opprinneligNavn> ],
         [ a owl:Restriction ;
             owl:minCardinality 0 ;
-            owl:onProperty <https://modell.samt-bu.no/kjerne/dodsdato> ],
+            owl:onProperty <https://modell.samt-bu.no/kjerne/fulltNavn> ],
         [ a owl:Restriction ;
-            owl:allValuesFrom <https://modell.samt-bu.no/kjerne/Jurisdiksjon> ;
-            owl:onProperty <https://modell.samt-bu.no/kjerne/statsborgerskap> ],
-        [ a owl:Restriction ;
-            owl:minCardinality 0 ;
-            owl:onProperty <https://modell.samt-bu.no/kjerne/identifikasjonsnummer> ],
+            owl:allValuesFrom <https://modell.samt-bu.no/kjerne/Sted> ;
+            owl:onProperty <https://modell.samt-bu.no/kjerne/dodssted> ],
         [ a owl:Restriction ;
             owl:allValuesFrom <https://modell.samt-bu.no/kjerne/Adresse> ;
             owl:onProperty <https://modell.samt-bu.no/kjerne/bostedsadresse> ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty <https://modell.samt-bu.no/kjerne/folkeregistrertAdresse> ],
         <https://modell.samt-bu.no/kjerne/Aktor> ;
     skos:definition "Et enkeltmenneske som kan være levende eller død, men ikke oppdiktet." ;
     skos:exactMatch <http://www.w3.org/ns/person#Person> ;
@@ -718,16 +718,16 @@ opplaring:utforer a owl:ObjectProperty ;
     rdfs:label "Rolle" ;
     dcterms:title "rolle" ;
     rdfs:subClassOf [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty <https://modell.samt-bu.no/kjerne/periode> ],
+        [ a owl:Restriction ;
             owl:allValuesFrom <https://modell.samt-bu.no/kjerne/Tidsperiode> ;
             owl:onProperty <https://modell.samt-bu.no/kjerne/periode> ],
         [ a owl:Restriction ;
-            owl:allValuesFrom <https://modell.samt-bu.no/kjerne/Aktor> ;
+            owl:minCardinality 0 ;
             owl:onProperty <https://modell.samt-bu.no/kjerne/erRolleFor> ],
         [ a owl:Restriction ;
-            owl:minCardinality 0 ;
-            owl:onProperty <https://modell.samt-bu.no/kjerne/periode> ],
-        [ a owl:Restriction ;
-            owl:minCardinality 0 ;
+            owl:allValuesFrom <https://modell.samt-bu.no/kjerne/Aktor> ;
             owl:onProperty <https://modell.samt-bu.no/kjerne/erRolleFor> ] ;
     skos:closeMatch org:Membership ;
     skos:definition "Funksjon som en aktør har i en bestemt sammenheng i en avgrenset periode." ;
@@ -743,13 +743,13 @@ opplaring:gjelder a owl:ObjectProperty .
 <https://modell.samt-bu.no/kjerne/Begrep> a owl:Class ;
     rdfs:label "Begrep" ;
     rdfs:subClassOf [ a owl:Restriction ;
-            owl:minCardinality 1 ;
+            owl:allValuesFrom xsd:anyURI ;
             owl:onProperty <https://modell.samt-bu.no/kjerne/iri> ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
             owl:onProperty <https://modell.samt-bu.no/kjerne/iri> ],
         [ a owl:Restriction ;
-            owl:allValuesFrom xsd:anyURI ;
+            owl:minCardinality 1 ;
             owl:onProperty <https://modell.samt-bu.no/kjerne/iri> ] ;
     skos:exactMatch skos:Concept ;
     skos:inScheme <https://modell.samt-bu.no/kjerne> .
@@ -758,10 +758,10 @@ opplaring:PedagogiskTilbud a owl:Class ;
     rdfs:label "PedagogiskTilbud" ;
     dcterms:title "pedagogisk tilbud" ;
     rdfs:subClassOf [ a owl:Restriction ;
-            owl:minCardinality 0 ;
+            owl:allValuesFrom opplaring:Oppvekstvirksomhet ;
             owl:onProperty opplaring:tilbysAv ],
         [ a owl:Restriction ;
-            owl:allValuesFrom opplaring:Oppvekstvirksomhet ;
+            owl:minCardinality 0 ;
             owl:onProperty opplaring:tilbysAv ] ;
     skos:closeMatch elm:LearningOpportunity ;
     skos:definition "Konkret tilbud om opplæring eller annen pedagogisk aktivitet som en oppvekstvirksomhet gir på et bestemt sted i en bestemt periode." ;
