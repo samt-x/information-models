@@ -47,7 +47,7 @@ jobs:
           export LINKML_DOCS_DIR="$RUNNER_TEMP/linkml-docs"
           mkdir -p "$LINKML_DOCS_DIR"
           index="$LINKML_DOCS_DIR/index.md"
-          printf '# LinkML-modeller\n\n| Dokumentasjon | OWL | Visning |\n| --- | --- | --- |\n' > "$index"
+          printf '# LinkML-modeller\n\n[Åpne alle modellene i Ontology Explorer](../viewer/)\n\n| Dokumentasjon | OWL | Visning |\n| --- | --- | --- |\n' > "$index"
           shopt -s globstar nullglob
           schemas=(linkml/**/*.{yaml,yml})
           if (( ${#schemas[@]} == 0 )); then
@@ -145,7 +145,7 @@ jobs:
         if: github.event_name == 'push' || (github.event.action != 'closed' && github.event.pull_request.head.repo.full_name == github.repository)
         run: |
           base_url="https://samt-x.github.io/information-models${PAGES_DIR:+/$PAGES_DIR}"
-          echo "GitHub Pages bygger [Ontology Explorer]($base_url/) og [LinkML-dokumentasjonen]($base_url/linkml/)." > "$RUNNER_TEMP/deploy-report.md"
+          echo "GitHub Pages bygger [LinkML-dokumentasjonen]($base_url/) og [Ontology Explorer]($base_url/viewer/)." > "$RUNNER_TEMP/deploy-report.md"
 
       - name: Rapporter resultatet
         if: ${{ !cancelled() }}
