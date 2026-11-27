@@ -2,7 +2,7 @@
 
 ## Utforsk modellene
 
-- [LinkML-dokumentasjon – klasser, felter og relasjoner](https://samt-x.github.io/information-models/linkml/)
+- [LinkML-modeller – dokumentasjon, nedlastbare OWL-filer i Turtle og visning per skjema](https://samt-x.github.io/information-models/linkml/)
 - [Ontology Explorer – utforsk TTL-modellene](https://samt-x.github.io/information-models/)
 
 ## Eksempelmodeller

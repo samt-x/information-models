@@ -1,0 +1,234 @@
+# Kilder: models/toppmodell/opplaring_v0.5.0.ttl og opplaring-shapes_v0.3.0.ttl.
+id: https://modell.samt-bu.no/opplaring
+name: opplaring
+version: 0.5.0
+license: http://publications.europa.eu/resource/authority/licence/CC_BY_4_0
+annotations:
+  title_en: Domain module for education
+  title_nn: Domenemodul for opplæring
+  description_en: Classes and relations for education in the childhood and youth sector.
+  description_nn: Klassar og relasjonar for opplæringsområdet i oppvekstsektoren.
+title: Domenemodul for opplæring
+description: Klasser og relasjoner for opplæringsområdet i oppvekstsektoren.
+imports:
+- kjerne
+prefixes:
+  opplaring: https://modell.samt-bu.no/opplaring/
+  org: http://www.w3.org/ns/org#
+  elm: http://data.europa.eu/snb/model/elm/
+default_prefix: opplaring
+
+classes:
+
+  Ansatt:
+    class_uri: opplaring:Ansatt
+    title: ansatt
+    description: Rolle som en fysisk person har i kraft av et ansettelsesforhold.
+    annotations:
+      title_en: employee
+      title_nn: tilsett
+      description_en: Role that a natural person holds by virtue of an employment relationship.
+      description_nn: Rolle som ein fysisk person har i kraft av eit tilsetjingsforhold.
+    is_a: Rolle
+    mixins:
+    - Organisasjonsmedlemskap
+    slot_usage:
+      erRolleFor:
+        range: FysiskPerson
+    attributes:
+
+      arbeidsgiver:
+        slot_uri: org:organization
+        title: arbeidsgiver
+        description: Organisasjonen den ansatte er ansatt i.
+        annotations:
+          title_en: employer
+          title_nn: arbeidsgjevar
+          description_en: The organisation in which the employee is employed.
+          description_nn: Organisasjonen den tilsette er tilsett i.
+        range: Virksomhet
+        multivalued: true
+
+      utforer:
+        slot_uri: opplaring:utforer
+        title: utfører
+        description: Angir et pedagogisk tilbud som en ansatt gjennomfører.
+        annotations:
+          title_en: performs
+          title_nn: utfører
+          description_en: Indicates an educational offering that an employee carries out.
+          description_nn: Angir eit pedagogisk tilbod som ein tilsett gjennomfører.
+        range: PedagogiskTilbud
+        multivalued: true
+
+  Deltaker:
+    class_uri: opplaring:Deltaker
+    title: deltaker
+    description: Rolle som en fysisk person har når den deltar i et pedagogisk tilbud.
+    annotations:
+      title_en: participant
+      title_nn: deltakar
+      description_en: Role that a natural person holds when participating in an educational offering.
+      description_nn: Rolle som ein fysisk person har når han eller ho deltek i eit pedagogisk tilbod.
+    is_a: Rolle
+    close_mappings:
+    - elm:LearningActivity
+    slot_usage:
+      erRolleFor:
+        range: FysiskPerson
+    attributes:
+
+      oppnar:
+        slot_uri: opplaring:oppnar
+        title: oppnår
+        description: Angir et resultat som en deltaker har oppnådd.
+        annotations:
+          title_en: achieves
+          title_nn: oppnår
+          description_en: Indicates a result that a participant has achieved.
+          description_nn: Angir eit resultat som ein deltakar har oppnådd.
+        range: Resultat
+        multivalued: true
+
+      pameldt:
+        slot_uri: opplaring:pameldt
+        title: påmeldt
+        description: Angir et pedagogisk tilbud som en deltaker er meldt på.
+        annotations:
+          title_en: enrolled in
+          title_nn: påmeld
+          description_en: Indicates an educational offering in which a participant is enrolled.
+          description_nn: Angir eit pedagogisk tilbod som ein deltakar er meld på.
+        range: PedagogiskTilbud
+        multivalued: true
+
+  Dokumentasjon:
+    class_uri: opplaring:Dokumentasjon
+    title: dokumentasjon
+    description: Dokument eller registrering som viser et resultat for en deltaker.
+    annotations:
+      title_en: documentation
+      title_nn: dokumentasjon
+      description_en: Document or record that shows a result for a participant.
+      description_nn: Dokument eller registrering som viser eit resultat for ein deltakar.
+    attributes:
+
+      gjelder:
+        slot_uri: opplaring:gjelder
+        title: gjelder
+        description: Angir hvem eller hva noe handler om.
+        annotations:
+          title_en: concerns
+          title_nn: gjeld
+          description_en: Indicates whom or what something is about.
+          description_nn: Angir kven eller kva noko handlar om.
+        range: Deltaker
+        multivalued: true
+
+  Oppvekstvirksomhet:
+    class_uri: opplaring:Oppvekstvirksomhet
+    title: oppvekstvirksomhet
+    description: Virksomhet som tilbyr pedagogiske tilbud til barn, unge eller voksne.
+    annotations:
+      title_en: childhood and youth organisation
+      title_nn: oppvekstverksemd
+      description_en: Organisation that provides educational offerings to children, young people or adults.
+      description_nn: Verksemd som tilbyr pedagogiske tilbod til born, unge eller vaksne.
+    is_a: Virksomhet
+    attributes:
+
+      tilbyr:
+        slot_uri: opplaring:tilbyr
+        title: tilbyr
+        description: Angir et pedagogisk tilbud som en virksomhet gir.
+        annotations:
+          title_en: offers
+          title_nn: tilbyr
+          description_en: Indicates an educational offering that an organisation provides.
+          description_nn: Angir eit pedagogisk tilbod som ei verksemd gir.
+        range: PedagogiskTilbud
+        multivalued: true
+        inverse: tilbysAv
+
+  PedagogiskTilbud:
+    class_uri: opplaring:PedagogiskTilbud
+    title: pedagogisk tilbud
+    description: Konkret tilbud om opplæring eller annen pedagogisk aktivitet som en oppvekstvirksomhet gir på et
+      bestemt sted i en bestemt periode.
+    annotations:
+      title_en: educational offering
+      title_nn: pedagogisk tilbod
+      description_en: Concrete offer of education or other pedagogical activity that an organisation in the childhood
+        and youth sector provides at a specific place for a specific period.
+      description_nn: Konkret tilbod om opplæring eller anna pedagogisk aktivitet som ei oppvekstverksemd gir på
+        ein bestemd stad i ein bestemd periode.
+    close_mappings:
+    - elm:LearningOpportunity
+    attributes:
+
+      tilbysAv:
+        slot_uri: opplaring:tilbysAv
+        title: tilbys av
+        description: Angir virksomheten som gir et pedagogisk tilbud.
+        annotations:
+          title_en: is offered by
+          title_nn: vert tilbode av
+          description_en: Indicates the organisation that provides an educational offering.
+          description_nn: Angir verksemda som gir eit pedagogisk tilbod.
+        range: Oppvekstvirksomhet
+        multivalued: true
+        inverse: tilbyr
+
+  Resultat:
+    class_uri: opplaring:Resultat
+    title: resultat
+    description: Det en deltaker oppnår gjennom et pedagogisk tilbud.
+    annotations:
+      title_en: result
+      title_nn: resultat
+      description_en: What a participant achieves through an educational offering.
+      description_nn: Det ein deltakar oppnår gjennom eit pedagogisk tilbod.
+    close_mappings:
+    - elm:Claim
+    attributes:
+
+      dokumenteresGjennom:
+        slot_uri: opplaring:dokumenteresGjennom
+        title: dokumenteres gjennom
+        description: Angir dokumentasjon som viser et resultat.
+        annotations:
+          title_en: is documented through
+          title_nn: vert dokumentert gjennom
+          description_en: Indicates documentation that shows a result.
+          description_nn: Angir dokumentasjon som viser eit resultat.
+        range: Dokumentasjon
+        multivalued: true
+
+      gjelder:
+        slot_uri: opplaring:gjelder
+        title: gjelder
+        description: Angir hvem eller hva noe handler om.
+        annotations:
+          title_en: concerns
+          title_nn: gjeld
+          description_en: Indicates whom or what something is about.
+          description_nn: Angir kven eller kva noko handlar om.
+        range: PedagogiskTilbud
+        multivalued: true
+
+  StotteOgHjelpevirksomhet:
+    class_uri: opplaring:StotteOgHjelpevirksomhet
+    title: støtte- og hjelpevirksomhet
+    description: Virksomhet som gir støtte til oppvekstvirksomheter eller deltakere uten selv å tilby pedagogiske
+      tilbud.
+    annotations:
+      title_en: support organisation
+      title_nn: støtte- og hjelpeverksemd
+      description_en: Organisation that supports childhood and youth organisations or participants without itself
+        providing educational offerings.
+      description_nn: Verksemd som gir støtte til oppvekstverksemder eller deltakarar utan sjølv å tilby pedagogiske
+        tilbod.
+
+  Organisasjonsmedlemskap:
+    class_uri: org:Membership
+    mixin: true

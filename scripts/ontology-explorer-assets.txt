@@ -1,0 +1,10 @@
+index-Bh8LSOu1.js
+wasm.worker-DGcfSk81.js
+ontology_explorer_wasm_bg-DY_htN6i.wasm
+elk-worker.min-r_yRvuMO.js
+barlow-latin-400-normal-qiz4-Cze.woff2
+barlow-latin-500-normal-BPAOfeC8.woff2
+barlow-latin-600-normal-DILqtrty.woff2
+barlow-latin-700-normal-A9pxMQ4z.woff2
+jetbrains-mono-latin-400-normal-V6pRDFza.woff2
+jetbrains-mono-latin-500-normal-BWZEU5yA.woff2
