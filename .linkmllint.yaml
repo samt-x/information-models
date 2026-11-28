@@ -3,3 +3,5 @@ extends: recommended
 rules:
   standard_naming:
     slot_pattern: camel
+  canonical_prefixes:
+    level: disabled
