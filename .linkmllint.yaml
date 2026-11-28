@@ -1,0 +1,5 @@
+# see: https://linkml.io/linkml/schemas/linter.html
+extends: recommended
+rules:
+  standard_naming:
+    slot_pattern: camel

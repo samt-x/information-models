@@ -1,15 +1,17 @@
-name: Valider LinkML
+name: Lint og valider LinkML
 
 on:
   pull_request:
     branches: [main]
     paths:
       - 'linkml/**'
+      - '.linkmllint.yaml'
       - '.github/workflows/validate-linkml.yml'
   push:
     branches: [main]
     paths:
       - 'linkml/**'
+      - '.linkmllint.yaml'
       - '.github/workflows/validate-linkml.yml'
 
 permissions:
@@ -22,18 +24,19 @@ jobs:
       - uses: actions/checkout@v4.4.0
         with:
           persist-credentials: false
-      - name: Valider skjemaene mot LinkML-metamodellen
+      - name: Lint og valider skjemaene
         shell: bash
         env:
           LINKML_IMAGE: linkml/linkml:1.12.1@sha256:37859c05b9ba1242be63f61d599edf4ba3a312d2d1893c067aefb191311b59c8
         run: |
-          shopt -s globstar nullglob
-          schemas=(linkml/**/*.{yaml,yml})
-          printf '## LinkML-validering (%d skjemaer)\n\n' "${#schemas[@]}" >> "$GITHUB_STEP_SUMMARY"
-          if (( ${#schemas[@]} )); then
-            printf -- '- `%s`\n' "${schemas[@]}" >> "$GITHUB_STEP_SUMMARY"
-            printf '\n' >> "$GITHUB_STEP_SUMMARY"
-          fi
           docker pull "$LINKML_IMAGE"
-          docker run --pull=never --rm -v "$PWD/linkml:/work/linkml:ro" -w /work "$LINKML_IMAGE" \
-            linkml validate "${schemas[@]}" 2>&1 | sed 's/^/    /' | tee -a "$GITHUB_STEP_SUMMARY"
+          status=0
+          
+          docker run --pull=never --rm -v "$PWD:/work:ro" -w /work "$LINKML_IMAGE" \
+            linkml lint --format markdown linkml/ | tee "$GITHUB_STEP_SUMMARY" || status=$?
+          
+          if [[ ! -s "$GITHUB_STEP_SUMMARY" ]]; then
+            echo 'LinkML kunne ikke lage rapporten. Se feilmeldingen i kjøreloggen.' >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+          exit "$status"
