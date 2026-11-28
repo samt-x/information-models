@@ -23,8 +23,16 @@ jobs:
         with:
           persist-credentials: false
       - name: Valider skjemaene mot LinkML-metamodellen
+        shell: bash
+        env:
+          LINKML_IMAGE: linkml/linkml:1.12.1@sha256:37859c05b9ba1242be63f61d599edf4ba3a312d2d1893c067aefb191311b59c8
         run: |
-          python3 -m venv "$RUNNER_TEMP/linkml-venv"
-          source "$RUNNER_TEMP/linkml-venv/bin/activate"
-          python -m pip install linkml==1.9.5 linkml-runtime==1.9.5
-          linkml lint --validate-only linkml/
+          shopt -s globstar nullglob
+          schemas=(linkml/**/*.{yaml,yml})
+          printf '## LinkML-validering (%d skjemaer)\n\n' "${#schemas[@]}" >> "$GITHUB_STEP_SUMMARY"
+          if (( ${#schemas[@]} )); then
+            printf -- '- `%s`\n' "${schemas[@]}" >> "$GITHUB_STEP_SUMMARY"
+            printf '\n' >> "$GITHUB_STEP_SUMMARY"
+          fi
+          docker run --rm -v "$PWD/linkml:/work/linkml:ro" -w /work "$LINKML_IMAGE" \
+            linkml validate "${schemas[@]}" 2>&1 | sed 's/^/    /' | tee -a "$GITHUB_STEP_SUMMARY"
