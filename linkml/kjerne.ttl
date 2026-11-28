@@ -29,29 +29,29 @@ kjerne:JuridiskEnhet a owl:Class ;
     rdfs:label "JuridiskEnhet" ;
     dcterms:title "juridisk enhet" ;
     rdfs:subClassOf [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty kjerne:juridiskNavn ],
+        [ a owl:Restriction ;
             owl:allValuesFrom kjerne:Begrep ;
-            owl:onProperty kjerne:organisasjonsform ],
-        [ a owl:Restriction ;
-            owl:minCardinality 0 ;
-            owl:onProperty kjerne:naringskode ],
-        [ a owl:Restriction ;
-            owl:allValuesFrom kjerne:Any ;
-            owl:onProperty kjerne:juridiskNavn ],
-        [ a owl:Restriction ;
-            owl:minCardinality 0 ;
-            owl:onProperty kjerne:juridiskNavn ],
-        [ a owl:Restriction ;
-            owl:minCardinality 0 ;
-            owl:onProperty kjerne:juridiskIdentifikator ],
-        [ a owl:Restriction ;
-            owl:minCardinality 0 ;
             owl:onProperty kjerne:organisasjonsform ],
         [ a owl:Restriction ;
             owl:allValuesFrom kjerne:Identifikator ;
             owl:onProperty kjerne:juridiskIdentifikator ],
         [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty kjerne:naringskode ],
+        [ a owl:Restriction ;
             owl:allValuesFrom kjerne:Begrep ;
-            owl:onProperty kjerne:naringskode ] ;
+            owl:onProperty kjerne:naringskode ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty kjerne:juridiskIdentifikator ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom kjerne:Any ;
+            owl:onProperty kjerne:juridiskNavn ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty kjerne:organisasjonsform ] ;
     skos:definition "En selvstendig næringsdrivende, et selskap eller en organisasjon som har juridiske rettigheter og plikter." ;
     skos:exactMatch legal:LegalEntity ;
     skos:inScheme <https://modell.samt-bu.no/kjerne> ;
@@ -63,15 +63,15 @@ kjerne:Virksomhet a owl:Class ;
     dcterms:title "organisasjon" ;
     rdfs:subClassOf [ a owl:Restriction ;
             owl:allValuesFrom kjerne:Any ;
-            owl:onProperty kjerne:navn ],
-        [ a owl:Restriction ;
-            owl:minCardinality 0 ;
             owl:onProperty kjerne:organisasjonsnummer ],
         [ a owl:Restriction ;
+            owl:allValuesFrom kjerne:Any ;
+            owl:onProperty kjerne:navn ],
+        [ a owl:Restriction ;
             owl:minCardinality 0 ;
             owl:onProperty kjerne:navn ],
         [ a owl:Restriction ;
-            owl:allValuesFrom kjerne:Any ;
+            owl:minCardinality 0 ;
             owl:onProperty kjerne:organisasjonsnummer ],
         kjerne:Aktor ;
     skos:altLabel "virksomhet" ;
@@ -90,17 +90,17 @@ kjerne:Foresatt a owl:Class ;
     rdfs:label "Foresatt" ;
     dcterms:title "foresatt" ;
     rdfs:subClassOf [ a owl:Restriction ;
-            owl:minCardinality 0 ;
-            owl:onProperty kjerne:erRolleFor ],
-        [ a owl:Restriction ;
-            owl:minCardinality 0 ;
+            owl:allValuesFrom kjerne:FysiskPerson ;
             owl:onProperty kjerne:erForesattFor ],
         [ a owl:Restriction ;
             owl:allValuesFrom kjerne:FysiskPerson ;
             owl:onProperty kjerne:erRolleFor ],
         [ a owl:Restriction ;
-            owl:allValuesFrom kjerne:FysiskPerson ;
+            owl:minCardinality 0 ;
             owl:onProperty kjerne:erForesattFor ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty kjerne:erRolleFor ],
         kjerne:Rolle ;
     skos:definition "Rolle som en fysisk person har når den har ansvar for et barn." ;
     skos:exactMatch kjerne:Foresatt ;
@@ -124,107 +124,107 @@ kjerne:FysiskPerson a owl:Class ;
     rdfs:label "FysiskPerson" ;
     dcterms:title "fysisk person" ;
     rdfs:subClassOf [ a owl:Restriction ;
-            owl:minCardinality 0 ;
-            owl:onProperty kjerne:juridiskKjonn ],
-        [ a owl:Restriction ;
             owl:allValuesFrom kjerne:Any ;
             owl:onProperty kjerne:fodselsdato ],
         [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty kjerne:mellomnavn ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty kjerne:statsborgerskap ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty kjerne:fulltNavn ],
+        [ a owl:Restriction ;
             owl:allValuesFrom kjerne:Begrep ;
-            owl:onProperty kjerne:sivilstand ],
+            owl:onProperty kjerne:juridiskKjonn ],
         [ a owl:Restriction ;
             owl:allValuesFrom kjerne:Any ;
             owl:onProperty kjerne:fulltNavn ],
-        [ a owl:Restriction ;
-            owl:minCardinality 0 ;
-            owl:onProperty kjerne:identifikasjonsnummer ],
-        [ a owl:Restriction ;
-            owl:allValuesFrom kjerne:Adresse ;
-            owl:onProperty kjerne:bostedsadresse ],
-        [ a owl:Restriction ;
-            owl:allValuesFrom kjerne:Jurisdiksjon ;
-            owl:onProperty kjerne:statsborgerskap ],
-        [ a owl:Restriction ;
-            owl:allValuesFrom kjerne:Any ;
-            owl:onProperty kjerne:etternavn ],
-        [ a owl:Restriction ;
-            owl:allValuesFrom xsd:string ;
-            owl:onProperty kjerne:opprinneligNavn ],
-        [ a owl:Restriction ;
-            owl:minCardinality 0 ;
-            owl:onProperty kjerne:kontaktpunkt ],
-        [ a owl:Restriction ;
-            owl:allValuesFrom kjerne:Any ;
-            owl:onProperty kjerne:fornavn ],
-        [ a owl:Restriction ;
-            owl:minCardinality 0 ;
-            owl:onProperty kjerne:dodssted ],
-        [ a owl:Restriction ;
-            owl:allValuesFrom kjerne:Sted ;
-            owl:onProperty kjerne:fodested ],
-        [ a owl:Restriction ;
-            owl:minCardinality 0 ;
-            owl:onProperty kjerne:sivilstand ],
-        [ a owl:Restriction ;
-            owl:allValuesFrom kjerne:Begrep ;
-            owl:onProperty kjerne:biologiskKjonn ],
-        [ a owl:Restriction ;
-            owl:allValuesFrom kjerne:Any ;
-            owl:onProperty kjerne:mellomnavn ],
         [ a owl:Restriction ;
             owl:allValuesFrom kjerne:Jurisdiksjon ;
             owl:onProperty kjerne:folkeregistrertAdresse ],
         [ a owl:Restriction ;
             owl:minCardinality 0 ;
-            owl:onProperty kjerne:fornavn ],
+            owl:onProperty kjerne:folkeregistrertAdresse ],
         [ a owl:Restriction ;
             owl:minCardinality 0 ;
-            owl:onProperty kjerne:fodested ],
+            owl:onProperty kjerne:identifikasjonsnummer ],
         [ a owl:Restriction ;
             owl:minCardinality 0 ;
-            owl:onProperty kjerne:dodsdato ],
-        [ a owl:Restriction ;
-            owl:minCardinality 0 ;
-            owl:onProperty kjerne:fodselsdato ],
-        [ a owl:Restriction ;
-            owl:allValuesFrom kjerne:Sted ;
-            owl:onProperty kjerne:dodssted ],
-        [ a owl:Restriction ;
-            owl:allValuesFrom kjerne:Begrep ;
-            owl:onProperty kjerne:juridiskKjonn ],
-        [ a owl:Restriction ;
-            owl:minCardinality 0 ;
-            owl:onProperty kjerne:statsborgerskap ],
-        [ a owl:Restriction ;
-            owl:minCardinality 0 ;
-            owl:onProperty kjerne:opprinneligNavn ],
+            owl:onProperty kjerne:etternavn ],
         [ a owl:Restriction ;
             owl:minCardinality 0 ;
             owl:onProperty kjerne:biologiskKjonn ],
         [ a owl:Restriction ;
             owl:minCardinality 0 ;
-            owl:onProperty kjerne:fulltNavn ],
+            owl:onProperty kjerne:fornavn ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom kjerne:Adresse ;
+            owl:onProperty kjerne:bostedsadresse ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom kjerne:Sted ;
+            owl:onProperty kjerne:dodssted ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty kjerne:fodested ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty kjerne:opprinneligNavn ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom kjerne:Any ;
+            owl:onProperty kjerne:mellomnavn ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty kjerne:fodselsdato ],
         [ a owl:Restriction ;
             owl:allValuesFrom kjerne:Any ;
             owl:onProperty kjerne:dodsdato ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty kjerne:juridiskKjonn ],
         [ a owl:Restriction ;
             owl:allValuesFrom kjerne:Identifikator ;
             owl:onProperty kjerne:identifikasjonsnummer ],
         [ a owl:Restriction ;
             owl:minCardinality 0 ;
-            owl:onProperty kjerne:folkeregistrertAdresse ],
-        [ a owl:Restriction ;
-            owl:minCardinality 0 ;
-            owl:onProperty kjerne:bostedsadresse ],
-        [ a owl:Restriction ;
-            owl:minCardinality 0 ;
-            owl:onProperty kjerne:mellomnavn ],
+            owl:onProperty kjerne:sivilstand ],
         [ a owl:Restriction ;
             owl:allValuesFrom kjerne:Kontaktpunkt ;
             owl:onProperty kjerne:kontaktpunkt ],
         [ a owl:Restriction ;
             owl:minCardinality 0 ;
+            owl:onProperty kjerne:kontaktpunkt ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom kjerne:Any ;
             owl:onProperty kjerne:etternavn ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom kjerne:Begrep ;
+            owl:onProperty kjerne:biologiskKjonn ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom kjerne:Jurisdiksjon ;
+            owl:onProperty kjerne:statsborgerskap ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty kjerne:dodssted ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty kjerne:dodsdato ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom kjerne:Any ;
+            owl:onProperty kjerne:fornavn ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty kjerne:opprinneligNavn ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom kjerne:Sted ;
+            owl:onProperty kjerne:fodested ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom kjerne:Begrep ;
+            owl:onProperty kjerne:sivilstand ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty kjerne:bostedsadresse ],
         kjerne:Aktor ;
     skos:definition "Et enkeltmenneske som kan være levende eller død, men ikke oppdiktet." ;
     skos:exactMatch person:Person ;
@@ -250,10 +250,10 @@ kjerne:Rolle a owl:Class ;
             owl:onProperty kjerne:periode ],
         [ a owl:Restriction ;
             owl:minCardinality 0 ;
-            owl:onProperty kjerne:periode ],
+            owl:onProperty kjerne:erRolleFor ],
         [ a owl:Restriction ;
             owl:minCardinality 0 ;
-            owl:onProperty kjerne:erRolleFor ],
+            owl:onProperty kjerne:periode ],
         [ a owl:Restriction ;
             owl:allValuesFrom kjerne:Aktor ;
             owl:onProperty kjerne:erRolleFor ] ;
